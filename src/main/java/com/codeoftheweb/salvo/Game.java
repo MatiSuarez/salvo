@@ -1,5 +1,6 @@
 package com.codeoftheweb.salvo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -21,6 +22,10 @@ public class Game {
     Set<GamePlayer> gamePlayers;
 
     public Game() { }
+
+    public long getId() {
+        return id;
+    }
 
     public Game(LocalDateTime creationDate) {
         this.creationDate = creationDate;
@@ -50,4 +55,6 @@ public class Game {
     public List<Player> getPlayers() {
         return gamePlayers.stream().map(sub -> sub.getPlayerID()).collect(Collectors.toList());
     }
+
+
 }
