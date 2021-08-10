@@ -76,6 +76,9 @@ public class SalvoApplication {
 
 			Ship ship2 = new Ship ( "Buque", gameplayer2, Arrays.asList("C1", "D1", "E1"));
 			shipRepository.save(ship2);
+
+			Ship ship3 = new Ship ( "Barquito", gameplayer2, Arrays.asList("D5"));
+			shipRepository.save(ship3);
 		};
 	}
 }
