@@ -1,6 +1,7 @@
 package com.codeoftheweb.salvo;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,6 +17,9 @@ public class SalvoController {
         @Autowired
         private GameRepository gameRepository;
 
+    @Autowired
+    private GamePlayerRepository gamePlayerRepository;
+
         @RequestMapping("/games")
         public List <Object> getGames() {
             return gameRepository
@@ -30,4 +34,10 @@ public class SalvoController {
         dto.put ("gamePlayers", game.getGamePlayers().stream().map(gamePlayer -> gamePlayer.makeGamePlayerDTO()).collect(Collectors.toList()) );
         return dto;
         }
+
+    @RequestMapping("/game_view/nn")
+    public Map <String, Object> findGame(@PathVariable Long nn) {
+            GamePlayer gamePlayer = gamePlayerRepository.getById(nn);
+            return makeGameDTO(gamePlayer.getGameID());
+    }
 }
