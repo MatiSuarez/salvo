@@ -25,6 +25,9 @@ public class GamePlayer {
     @JoinColumn(name="game_id")
     private Game gameID;
 
+    @OneToMany(mappedBy="gamePlayerID", fetch=FetchType.EAGER)
+    Set<Ship> ships;
+
     public GamePlayer () {}
 
     public GamePlayer(LocalDateTime joinDate, Player playerID, Game gameID) {
@@ -65,4 +68,17 @@ public class GamePlayer {
     public void setGameID(Game gameID) {
         this.gameID = gameID;
     }
+
+    public Set<Ship> getShips() {
+        return ships;
+    }
+
+    public void setShips(Set<Ship> ships) {
+        this.ships = ships;
+    }
+
+    /* public void addShip(Ship ship) {
+        ship.setGamePlayerID(this);
+        ship.add(ship);
+    } */
 }
