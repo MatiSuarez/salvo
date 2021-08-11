@@ -4,7 +4,9 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 @Entity
 public class Ship {
@@ -30,6 +32,7 @@ public class Ship {
         this.gamePlayerID = gamePlayerID;
         this.locations = locations;
     }
+
 
     public long getId() {
         return id;
