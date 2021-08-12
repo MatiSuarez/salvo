@@ -30,6 +30,29 @@ public class SalvoController {
                     .collect(Collectors.toList());
     }
 
+    private Map<String, Object> makeGameDTO (Game game) {
+            Map <String, Object> dto = new LinkedHashMap<String, Object>();
+        dto.put("id", game.getId());
+        dto.put("created", game.getCreationDate());
+        dto.put("gamePlayers", game.getGamePlayers()
+                .stream()
+                .map(gamePlayer -> makeGamePlayerDTO(gamePlayer))
+                .collect(Collectors.toList()));
+        return dto;
+        }
+
+        /* @RequestMapping("/game_view/{nn}")
+         public Map <String, Object> findGame(@PathVariable Long nn) {
+            GamePlayer gamePlayer = gamePlayerRepository.getById(nn);
+            return makeGameDTO(gamePlayer.getGameID());
+    } */
+        public Map<String, Object> makeGamePlayerDTO(GamePlayer gamePlayer){
+            Map<String, Object> dto = new LinkedHashMap<>();
+            dto.put("id", gamePlayer.getId());
+            dto.put("player", gamePlayer.getPlayerID().makePlayerDTO());
+            return dto;
+        }
+
     public Map<String, Object> makeShipDTO(Ship ship){
         Map<String, Object> dto = new LinkedHashMap<>();
         dto.put("type", ship.getShipType());
@@ -37,31 +60,14 @@ public class SalvoController {
         return dto;
     }
 
-    private Map<String, Object> makeGameDTO (Game game) {
-            Map <String, Object> dto = new LinkedHashMap<String, Object>();
-        dto.put("id", game.getId());
-        dto.put("created", game.getCreationDate());
-        dto.put("gamePlayers", game.getGamePlayers()
-                .stream()
-                .map(gamePlayer -> gamePlayer.makeGamePlayerDTO())
-                .collect(Collectors.toList()));
-        dto.put("ships", game.getGamePlayers()
-                .stream()
-                .map(gamePlayer -> gamePlayer.getShips()
-                        .stream()
-                        .map(ship -> makeShipDTO(ship))
-                        .collect(Collectors.toList())));
-        return dto;
-        }
 
-
-    private Map<String, Object> makeGamePlayerView (GamePlayer gamePlayer) {
+    private Map<String, Object> makeGameViewDTO (GamePlayer gamePlayer) {
         Map <String, Object> dto = new LinkedHashMap<String, Object>();
         dto.put("id", gamePlayer.getGameID().getId());
         dto.put("created", gamePlayer.getGameID().getCreationDate());
         dto.put("gamePlayers", gamePlayer.getGameID().getGamePlayers()
                 .stream()
-                .map(gp -> makeGamePlayerView(gp))
+                .map(gp -> makeGamePlayerDTO(gp))
                 .collect(Collectors.toList()));
         dto.put("ships", gamePlayer.getShips()
                         .stream()
@@ -70,16 +76,11 @@ public class SalvoController {
         return dto;
         }
 
-        /*@RequestMapping("/game_view/{nn}")
-    public Map <String, Object> findGame(@PathVariable Long nn) {
-            GamePlayer gamePlayer = gamePlayerRepository.getById(nn);
-            return makeGameDTO(gamePlayer.getGameID());
-    } */
 
         @RequestMapping("/game_view/{nn}")
         public Map <String, Object> findGame(@PathVariable Long nn) {
             GamePlayer gamePlayer = gamePlayerRepository.getById(nn);
-            return makeGamePlayerView(gamePlayer);
+            return makeGameViewDTO(gamePlayer);
         }
 
 }
