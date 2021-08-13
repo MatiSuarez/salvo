@@ -66,11 +66,10 @@ public class SalvoController {
     public Map<String, Object> makeSalvoDTO(Salvo salvo){
         Map<String, Object> dto = new LinkedHashMap<>();
         dto.put("turn", salvo.getTurnNumber());
-        dto.put("cell", salvo.getSalvoLocations());
+        dto.put("player", salvo.getSalvoID());
+        dto.put("locations", salvo.getSalvoLocations());
         return dto;
     }
-
-
 
 
     private Map<String, Object> makeGameViewDTO (GamePlayer gamePlayer, Salvo salvo) {

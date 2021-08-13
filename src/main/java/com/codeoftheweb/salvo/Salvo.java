@@ -18,7 +18,7 @@ public class Salvo {
     private String turnNumber;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="salvoID")
+    @Column(name="salvoID")
     private GamePlayer salvoID;
 
     @ElementCollection
