@@ -19,27 +19,19 @@ public class Salvo {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="salvoID")
-    private GamePlayer gamePlayerID;
+    private GamePlayer salvoID;
 
     @ElementCollection
-    @Column(name="locations")
-    private List<String> locations = new ArrayList<>();
+    @Column(name="salvoLocations")
+    private List<String> salvoLocations = new ArrayList<>();
 
 
     public Salvo (){}
 
-    public Salvo(String turnNumber, GamePlayer gamePlayerID, List<String> locations) {
+    public Salvo(String turnNumber, GamePlayer salvoID, List<String> salvoLocations) {
         this.turnNumber = turnNumber;
-        this.gamePlayerID = gamePlayerID;
-        this.locations = locations;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
+        this.salvoID = salvoID;
+        this.salvoLocations = salvoLocations;
     }
 
     public String getTurnNumber() {
@@ -50,19 +42,19 @@ public class Salvo {
         this.turnNumber = turnNumber;
     }
 
-    public GamePlayer getGamePlayerID() {
-        return gamePlayerID;
+    public GamePlayer getSalvoID() {
+        return salvoID;
     }
 
-    public void setGamePlayerID(GamePlayer gamePlayerID) {
-        this.gamePlayerID = gamePlayerID;
+    public void setSalvoID(GamePlayer salvoID) {
+        this.salvoID = salvoID;
     }
 
-    public List<String> getLocations() {
-        return locations;
+    public List<String> getSalvoLocations() {
+        return salvoLocations;
     }
 
-    public void setLocations(List<String> locations) {
-        this.locations = locations;
+    public void setSalvoLocations(List<String> salvoLocations) {
+        this.salvoLocations = salvoLocations;
     }
 }

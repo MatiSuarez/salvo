@@ -23,6 +23,9 @@ public class SalvoController {
     @Autowired
     private ShipRepository shipRepository;
 
+    @Autowired
+    private SalvoRepository salvoRepository;
+
         @RequestMapping("/games")
         public List <Object> getGames() {
             return gameRepository
@@ -60,8 +63,17 @@ public class SalvoController {
         return dto;
     }
 
+    public Map<String, Object> makeSalvoDTO(Salvo salvo){
+        Map<String, Object> dto = new LinkedHashMap<>();
+        dto.put("turn", salvo.getTurnNumber());
+        dto.put("cell", salvo.getSalvoLocations());
+        return dto;
+    }
 
-    private Map<String, Object> makeGameViewDTO (GamePlayer gamePlayer) {
+
+
+
+    private Map<String, Object> makeGameViewDTO (GamePlayer gamePlayer, Salvo salvo) {
         Map <String, Object> dto = new LinkedHashMap<String, Object>();
         dto.put("id", gamePlayer.getGameID().getId());
         dto.put("created", gamePlayer.getGameID().getCreationDate());
@@ -69,10 +81,10 @@ public class SalvoController {
                 .stream()
                 .map(gp -> makeGamePlayerDTO(gp))
                 .collect(Collectors.toList()));
-        dto.put("ships", gamePlayer.getShips()
-                        .stream()
-                        .map(ship -> makeShipDTO(ship))
-                        .collect(Collectors.toList()));
+        dto.put("salvoes", salvo.getSalvoID().getSalvoes()
+                .stream()
+                .map(slv -> makeSalvoDTO (slv))
+                .collect(Collectors.toList()));
         return dto;
         }
 
@@ -80,7 +92,8 @@ public class SalvoController {
         @RequestMapping("/game_view/{nn}")
         public Map <String, Object> findGame(@PathVariable Long nn) {
             GamePlayer gamePlayer = gamePlayerRepository.getById(nn);
-            return makeGameViewDTO(gamePlayer);
+            Salvo salvo = salvoRepository.getById(nn);
+            return makeGameViewDTO(gamePlayer, salvo);
         }
 
 }
