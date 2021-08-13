@@ -29,6 +29,9 @@ public class GamePlayer {
     @OneToMany(mappedBy="gamePlayerID", fetch=FetchType.EAGER)
     Set<Ship> ships;
 
+    @OneToMany(mappedBy="salvoID", fetch=FetchType.EAGER)
+    Set<Salvo> salvos;
+
     public GamePlayer () {}
 
     public GamePlayer(LocalDateTime joinDate, Player playerID, Game gameID) {
