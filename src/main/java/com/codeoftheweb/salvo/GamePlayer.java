@@ -32,6 +32,7 @@ public class GamePlayer {
     @OneToMany(mappedBy="salvoID", fetch=FetchType.EAGER)
     Set<Salvo> salvoes;
 
+
     public GamePlayer () {}
 
     public GamePlayer(LocalDateTime joinDate, Player playerID, Game gameID) {
@@ -44,6 +45,7 @@ public class GamePlayer {
     public long getId() {
         return id;
     }
+
     public LocalDateTime getJoinDate() {
         return joinDate;
     }
@@ -76,6 +78,7 @@ public class GamePlayer {
         this.ships = ships;
     }
 
+
     public Set<Salvo> getSalvoes() {
         return salvoes;
     }
@@ -83,9 +86,4 @@ public class GamePlayer {
     public void setSalvoes(Set<Salvo> salvoes) {
         this.salvoes = salvoes;
     }
-
-    /* public void addShip(Ship ship) {
-        ship.setGamePlayerID(this);
-        ship.add(ship);
-    } */
 }

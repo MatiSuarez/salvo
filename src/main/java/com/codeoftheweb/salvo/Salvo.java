@@ -15,39 +15,40 @@ public class Salvo {
     @GenericGenerator(name = "native", strategy = "native")
     private long id;
 
-    private String turnNumber;
+    private int turn;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @Column(name="salvoID")
+    @JoinColumn (name = "salvoID")
     private GamePlayer salvoID;
 
     @ElementCollection
-    @Column(name="salvoLocations")
+    @Column(name = "salvoLocations")
     private List<String> salvoLocations = new ArrayList<>();
 
 
-    public Salvo (){}
+    public Salvo() {
+    }
 
-    public Salvo(String turnNumber, GamePlayer salvoID, List<String> salvoLocations) {
-        this.turnNumber = turnNumber;
+    public Salvo(int turn, GamePlayer salvoID, List<String> salvoLocations) {
+        this.turn = turn;
         this.salvoID = salvoID;
         this.salvoLocations = salvoLocations;
     }
 
-    public String getTurnNumber() {
-        return turnNumber;
+    public long getId() {
+        return id;
     }
 
-    public void setTurnNumber(String turnNumber) {
-        this.turnNumber = turnNumber;
+    public void setId(long id) {
+        this.id = id;
     }
 
-    public GamePlayer getSalvoID() {
-        return salvoID;
+    public int getTurn() {
+        return turn;
     }
 
-    public void setSalvoID(GamePlayer salvoID) {
-        this.salvoID = salvoID;
+    public void setTurn(int turn) {
+        this.turn = turn;
     }
 
     public List<String> getSalvoLocations() {
@@ -57,4 +58,17 @@ public class Salvo {
     public void setSalvoLocations(List<String> salvoLocations) {
         this.salvoLocations = salvoLocations;
     }
+
+    public GamePlayer getSalvoID() {
+        return salvoID;
+    }
+
+    public void setSalvoID(GamePlayer salvoID) {
+        this.salvoID = salvoID;
+    }
 }
+
+
+
+
+

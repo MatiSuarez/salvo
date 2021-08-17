@@ -26,15 +26,15 @@ public class SalvoController {
     @Autowired
     private SalvoRepository salvoRepository;
 
-        @RequestMapping("/games")
-        public List <Object> getGames() {
-            return gameRepository
-                    .findAll().stream().map(game -> makeGameDTO(game))
-                    .collect(Collectors.toList());
+    @RequestMapping("/games")
+    public List <Object> getGames() {
+        return gameRepository
+                .findAll().stream().map(game -> makeGameDTO(game))
+                .collect(Collectors.toList());
     }
 
     private Map<String, Object> makeGameDTO (Game game) {
-            Map <String, Object> dto = new LinkedHashMap<String, Object>();
+        Map <String, Object> dto = new LinkedHashMap<String, Object>();
         dto.put("id", game.getId());
         dto.put("created", game.getCreationDate());
         dto.put("gamePlayers", game.getGamePlayers()
@@ -42,19 +42,19 @@ public class SalvoController {
                 .map(gamePlayer -> makeGamePlayerDTO(gamePlayer))
                 .collect(Collectors.toList()));
         return dto;
-        }
+    }
 
-        /* @RequestMapping("/game_view/{nn}")
-         public Map <String, Object> findGame(@PathVariable Long nn) {
-            GamePlayer gamePlayer = gamePlayerRepository.getById(nn);
-            return makeGameDTO(gamePlayer.getGameID());
-    } */
-        public Map<String, Object> makeGamePlayerDTO(GamePlayer gamePlayer){
-            Map<String, Object> dto = new LinkedHashMap<>();
-            dto.put("id", gamePlayer.getId());
-            dto.put("player", gamePlayer.getPlayerID().makePlayerDTO());
-            return dto;
-        }
+    /* @RequestMapping("/game_view/{nn}")
+     public Map <String, Object> findGame(@PathVariable Long nn) {
+        GamePlayer gamePlayer = gamePlayerRepository.getById(nn);
+        return makeGameDTO(gamePlayer.getGameID());
+} */
+    public Map<String, Object> makeGamePlayerDTO(GamePlayer gamePlayer){
+        Map<String, Object> dto = new LinkedHashMap<>();
+        dto.put("id", gamePlayer.getId());
+        dto.put("player", gamePlayer.getPlayerID().makePlayerDTO());
+        return dto;
+    }
 
     public Map<String, Object> makeShipDTO(Ship ship){
         Map<String, Object> dto = new LinkedHashMap<>();
@@ -65,11 +65,12 @@ public class SalvoController {
 
     public Map<String, Object> makeSalvoDTO(Salvo salvo){
         Map<String, Object> dto = new LinkedHashMap<>();
-        dto.put("turn", salvo.getTurnNumber());
-        dto.put("player", salvo.getSalvoID());
+        dto.put("turn", salvo.getTurn());
+        dto.put("player", salvo.getSalvoID().getPlayerID().getId());
         dto.put("locations", salvo.getSalvoLocations());
         return dto;
     }
+
 
 
     private Map<String, Object> makeGameViewDTO (GamePlayer gamePlayer, Salvo salvo) {
@@ -80,19 +81,25 @@ public class SalvoController {
                 .stream()
                 .map(gp -> makeGamePlayerDTO(gp))
                 .collect(Collectors.toList()));
+        dto.put("ships", gamePlayer.getShips()
+                .stream()
+                .map(ship -> makeShipDTO(ship))
+                .collect(Collectors.toList()));
         dto.put("salvoes", salvo.getSalvoID().getSalvoes()
                 .stream()
-                .map(slv -> makeSalvoDTO (slv))
+                .map(slv -> makeSalvoDTO((slv)))
                 .collect(Collectors.toList()));
         return dto;
-        }
+    }
 
 
-        @RequestMapping("/game_view/{nn}")
-        public Map <String, Object> findGame(@PathVariable Long nn) {
-            GamePlayer gamePlayer = gamePlayerRepository.getById(nn);
-            Salvo salvo = salvoRepository.getById(nn);
-            return makeGameViewDTO(gamePlayer, salvo);
-        }
+    @RequestMapping("/game_view/{nn}")
+    public Map <String, Object> findGame(@PathVariable Long nn) {
+        GamePlayer gamePlayer = gamePlayerRepository.getById(nn);
+        Salvo salvo = salvoRepository.getById(nn);
+        return makeGameViewDTO(gamePlayer, salvo);
+    }
 
 }
+
+
