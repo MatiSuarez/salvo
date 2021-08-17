@@ -79,10 +79,12 @@ public class SalvoApplication {
 			Ship ship3 = new Ship ( "Submarine", gameplayer2, Arrays.asList("E1", "F1", "G1"));
 			shipRepository.save(ship3);
 
-			Salvo salvo1 = new Salvo(1, gameplayer1, Arrays.asList(("E2")));
+			Salvo salvo1 = new Salvo(1, gameplayer1, Arrays.asList("E2"));
 			salvoRepository.save(salvo1);
-			Salvo salvo2 = new Salvo(1, gameplayer2, Arrays.asList(("G5")));
+			Salvo salvo2 = new Salvo(1, gameplayer2, Arrays.asList("G5"));
 			salvoRepository.save(salvo2);
+			Salvo salvo3 = new Salvo(2, gameplayer1, Arrays.asList("F1", "F2"));
+			salvoRepository.save(salvo3);
 		};
 	}
 }
