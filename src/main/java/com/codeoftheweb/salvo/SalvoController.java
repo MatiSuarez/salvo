@@ -37,6 +37,20 @@ public class SalvoController {
                 .collect(Collectors.toList());
     }
 
+
+    public Map<String, Object> makeGamePlayerDTO(GamePlayer gamePlayer){
+        Map<String, Object> dto = new LinkedHashMap<>();
+        dto.put("id", gamePlayer.getId());
+        dto.put("player", gamePlayer.getPlayerID().makePlayerDTO());
+        return dto;
+    }
+
+    public Map<String, Object> makeScoreDTO(Score score){
+        Map<String, Object> dto = new LinkedHashMap<>();
+        dto.put("total", score.getPlayerID().getId());
+        return dto;
+    }
+
     private Map<String, Object> makeGameDTO (Game game) {
         Map <String, Object> dto = new LinkedHashMap<String, Object>();
         dto.put("id", game.getId());
@@ -48,7 +62,7 @@ public class SalvoController {
         dto.put("scores", game.getScores()
                 .stream()
                 .map(s -> makeScoreDTO(s))
-                .collect(Collectors.toList()));
+                .findFirst());
         return dto;
     }
 
@@ -57,12 +71,7 @@ public class SalvoController {
         GamePlayer gamePlayer = gamePlayerRepository.getById(nn);
         return makeGameDTO(gamePlayer.getGameID());
 } */
-    public Map<String, Object> makeGamePlayerDTO(GamePlayer gamePlayer){
-        Map<String, Object> dto = new LinkedHashMap<>();
-        dto.put("id", gamePlayer.getId());
-        dto.put("player", gamePlayer.getPlayerID().makePlayerDTO());
-        return dto;
-    }
+
 
     public Map<String, Object> makeShipDTO(Ship ship){
         Map<String, Object> dto = new LinkedHashMap<>();
@@ -79,11 +88,6 @@ public class SalvoController {
         return dto;
     }
 
-    public Map<String, Object> makeScoreDTO(Score score){
-        Map<String, Object> dto = new LinkedHashMap<>();
-        dto.put("total", score.getPlayerID().getId());
-        return dto;
-    }
 
 
     private Map<String, Object> makeGameViewDTO (GamePlayer gamePlayer, Salvo salvo) {
