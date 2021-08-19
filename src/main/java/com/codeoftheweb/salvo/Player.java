@@ -39,11 +39,6 @@ public class Player {
         this.userName = userName;
     }
 
-    /*public void addGamePlayer(GamePlayer gameplayer) {
-        gameplayer.setPlayerID(this);
-        gamePlayers.add(gameplayer);
-     } */
-
     public Set<GamePlayer> getGamePlayers() {
         return gamePlayers;
     }
