@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -87,7 +88,18 @@ public class SalvoController {
                 .collect(Collectors.toList()));
         dto.put("salvoes", gamePlayer.getGameID().getGamePlayers()
                 .stream()
-                .flatMap(slv -> slv.getSalvoes().stream().map(slv1 -> makeSalvoDTO(slv1))));
+                .flatMap(slv -> slv.getSalvoes()
+                        .stream().map(slv1 -> makeSalvoDTO(slv1))).collect(Collectors.toList()));
+
+        /* UTILIZANDO 'FOR'
+        List <Map <String, Object>> listAux= new ArrayList<>();
+                for(GamePlayer gp:gamePlayer.getGameID().getGamePlayers();){
+                    for(Salvo s:gamePlayer.getSalvoes();){
+                        listAux.add(makeSalvoDTO());
+                    }
+                }
+                dto.put("salvoes", listAux);  */
+
         return dto;
     }
 
