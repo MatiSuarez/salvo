@@ -91,7 +91,7 @@ public class SalvoController {
                 .flatMap(slv -> slv.getSalvoes()
                         .stream().map(slv1 -> makeSalvoDTO(slv1))).collect(Collectors.toList()));
 
-        /* UTILIZANDO 'FOR'
+        /* UTILIZANDO 'FOR' PARA LOS SALVO
         List <Map <String, Object>> listAux= new ArrayList<>();
                 for(GamePlayer gp:gamePlayer.getGameID().getGamePlayers();){
                     for(Salvo s:gamePlayer.getSalvoes();){
