@@ -13,7 +13,7 @@ public class Score {
     @GenericGenerator(name = "native", strategy = "native")
     private long id;
 
-    private long score;
+    private double score;
     private LocalDateTime finishDate;
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -27,19 +27,19 @@ public class Score {
 
     public Score() { }
 
-    public Score(LocalDateTime finishDate, long score, Player playerID, Game gameID) {
+    public Score(LocalDateTime finishDate, double score, Player playerID, Game gameID) {
         this.finishDate = finishDate;
         this.score = score;
         this.playerID = playerID;
         this.gameID = gameID;
     }
 
-    public long getId() {
-        return id;
+    public double getScore() {
+        return score;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public void setScore(double score) {
+        this.score = score;
     }
 
     public LocalDateTime getFinishDate() {
@@ -48,14 +48,6 @@ public class Score {
 
     public void setFinishDate(LocalDateTime finishDate) {
         this.finishDate = finishDate;
-    }
-
-    public long getScore() {
-        return score;
-    }
-
-    public void setScore(long score) {
-        this.score = score;
     }
 
     public Player getPlayerID() {
