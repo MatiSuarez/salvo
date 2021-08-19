@@ -93,12 +93,12 @@ public class SalvoController {
 
         /* UTILIZANDO 'FOR' PARA LOS SALVO
         List <Map <String, Object>> listAux= new ArrayList<>();
-                for(GamePlayer gp:gamePlayer.getGameID().getGamePlayers();){
-                    for(Salvo s:gamePlayer.getSalvoes();){
-                        listAux.add(makeSalvoDTO());
+                for(GamePlayer gp:gamePlayer.getGameID().getGamePlayers()){
+                    for(Salvo s:gamePlayer.getSalvoes()){
+                        listAux.add(this.makeSalvoDTO(s));
                     }
                 }
-                dto.put("salvoes", listAux);  */
+                dto.put("salvoes", listAux); */
         return dto;
     }
 
