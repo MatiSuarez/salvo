@@ -1,6 +1,5 @@
-package com.codeoftheweb.salvo;
+package com.codeoftheweb.salvo.Clases;
 
-import jdk.javadoc.doclet.Taglet;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
