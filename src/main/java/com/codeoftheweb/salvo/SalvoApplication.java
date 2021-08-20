@@ -92,10 +92,12 @@ public class SalvoApplication {
 			salvoRepository.save(salvo3);
 
 
-			Score score1 = new Score(LocalDateTime.now(), 1, player1, game1);
+			Score score1 = new Score(LocalDateTime.now(), 2, player1, game1);
 			scoreRepository.save(score1);
-			Score score2 = new Score(LocalDateTime.now(), 0.5, player2, game1);
+			Score score2 = new Score(LocalDateTime.now(), 1, player2, game1);
 			scoreRepository.save(score2);
+			Score score3 = new Score(LocalDateTime.now(), 0 , player3, game2);
+			scoreRepository.save(score3);
 		};
 	}
 }

@@ -47,7 +47,9 @@ public class SalvoController {
 
     public Map<String, Object> makeScoreDTO(Score score){
         Map<String, Object> dto = new LinkedHashMap<>();
-        dto.put("total", score.getPlayerID().getId());
+        dto.put("player", score.getPlayerID().getId());
+        dto.put("score", score.getScore());
+        dto.put("finishDate", score.getFinishDate());
         return dto;
     }
 
@@ -62,7 +64,7 @@ public class SalvoController {
         dto.put("scores", game.getScores()
                 .stream()
                 .map(s -> makeScoreDTO(s))
-                .findFirst());
+                .collect(Collectors.toList()));
         return dto;
     }
 
