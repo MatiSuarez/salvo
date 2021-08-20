@@ -22,7 +22,7 @@ public class Game {
     Set<GamePlayer> gamePlayers;
 
     @OneToMany(mappedBy="gameID", fetch=FetchType.EAGER)
-    Set<Score> Scores;
+    Set<Score> scores;
 
 
     public List<Player> getPlayers() {
@@ -57,10 +57,10 @@ public class Game {
     }
 
     public Set<Score> getScores() {
-        return Scores;
+        return scores;
     }
 
     public void setScores(Set<Score> scores) {
-        Scores = scores;
+        scores = scores;
     }
 }

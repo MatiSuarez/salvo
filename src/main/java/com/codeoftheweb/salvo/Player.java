@@ -23,7 +23,7 @@ public class Player {
     Set<GamePlayer> gamePlayers;
 
     @OneToMany(mappedBy="playerID", fetch=FetchType.EAGER)
-    Set<Score> Scores;
+    Set<Score> scores;
 
     @JsonIgnore
     public List<Game> getGames() {
@@ -64,10 +64,10 @@ public class Player {
     }
 
     public Set<Score> getScores() {
-        return Scores;
+        return scores;
     }
 
     public void setScores(Set<Score> scores) {
-        Scores = scores;
+        scores = scores;
     }
 }
