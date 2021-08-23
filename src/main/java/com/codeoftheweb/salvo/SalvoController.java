@@ -32,10 +32,13 @@ public class SalvoController {
     private ScoreRepository scoreRepository;
 
     @RequestMapping("/games")
-    public List <Object> getGames() {
-        return gameRepository
-                .findAll().stream().map(game -> makeGameDTO(game))
-                .collect(Collectors.toList());
+    public Map<String, Object> game(){
+        Map<String, Object> dto = new LinkedHashMap<>();
+        dto.put("games", gameRepository.findAll()
+                .stream()
+                .map(game -> makeGameDTO(game))
+                .collect(Collectors.toList()));
+        return dto;
     }
 
 
@@ -54,7 +57,7 @@ public class SalvoController {
         return dto;
     }
 
-    private Map<String, Object> makeGameDTO (Game game) {
+    public Map<String, Object> makeGameDTO (Game game) {
         Map <String, Object> dto = new LinkedHashMap<String, Object>();
         dto.put("id", game.getId());
         dto.put("created", game.getCreationDate());

@@ -97,16 +97,18 @@ public class SalvoApplication {
 			scoreRepository.save(score1);
 			Score score2 = new Score(LocalDateTime.now(), 0, player2, game1);
 			scoreRepository.save(score2);
-			Score score3 = new Score(LocalDateTime.now(), 1, player1, game2);
+			Score score3 = new Score(LocalDateTime.now(), 0.5, player1, game2);
 			scoreRepository.save(score3);
-			Score score4 = new Score(LocalDateTime.now(), 1, player2, game2);
+			Score score4 = new Score(LocalDateTime.now(), 0.5, player2, game2);
 			scoreRepository.save(score4);
 			Score score5 = new Score(LocalDateTime.now(), 1, player2, game3);
 			scoreRepository.save(score5);
 			Score score6 = new Score(LocalDateTime.now(), 0 , player3, game3);
 			scoreRepository.save(score6);
-			Score score7 = new Score(LocalDateTime.now(), 0 , player3, game4);
+			Score score7 = new Score(LocalDateTime.now(), 0.5, player1, game4);
 			scoreRepository.save(score7);
+			Score score8 = new Score(LocalDateTime.now(), 0.5 , player2, game4);
+			scoreRepository.save(score8);
 		};
 	}
 }
