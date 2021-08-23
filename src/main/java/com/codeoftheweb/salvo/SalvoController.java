@@ -73,15 +73,22 @@ public class SalvoController {
                 .stream()
                 .map(s -> makeScoreDTO(s))
                 .collect(Collectors.toList()));
+
+        //OTRA FORMA DE RESOLVER SCORE
+        /*dto.put("scores", game.getGamePlayers()
+                .stream()
+                .map( sc -> {
+                    if(sc.getScore() != null){
+                        return makeScoreDTO(sc.getScore());
+                    }
+                    else {
+                        return null;
+                    }
+                })
+        );*/
+
         return dto;
     }
-
-    /* @RequestMapping("/game_view/{nn}")
-     public Map <String, Object> findGame(@PathVariable Long nn) {
-        GamePlayer gamePlayer = gamePlayerRepository.getById(nn);
-        return makeGameDTO(gamePlayer.getGameID());
-} */
-
 
     public Map<String, Object> makeShipDTO(Ship ship){
         Map<String, Object> dto = new LinkedHashMap<>();
@@ -117,8 +124,8 @@ public class SalvoController {
                 .flatMap(slv -> slv.getSalvoes()
                         .stream().map(slv1 -> makeSalvoDTO(slv1))).collect(Collectors.toList()));
 
-        /* UTILIZANDO 'FOR' PARA LOS SALVO
-        List <Map <String, Object>> listAux= new ArrayList<>();
+        // UTILIZANDO 'FOR' PARA LOS SALVO
+        /*List <Map <String, Object>> listAux= new ArrayList<>();
                 for(GamePlayer gp:gamePlayer.getGameID().getGamePlayers()){
                     for(Salvo s:gamePlayer.getSalvoes()){
                         listAux.add(this.makeSalvoDTO(s));

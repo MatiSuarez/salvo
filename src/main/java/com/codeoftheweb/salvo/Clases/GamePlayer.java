@@ -84,6 +84,8 @@ public class GamePlayer {
         this.salvoes = salvoes;
     }
 
+
+    ////OTRA FORMA DE RESOLVER SCORE
     /*public  Score getScore(){
         return playerID.getScore(this.gameID);
     }*/

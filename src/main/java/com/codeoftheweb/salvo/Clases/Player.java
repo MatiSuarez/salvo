@@ -73,7 +73,7 @@ public class Player {
 
 
     //OTRA FORMA DE RESOLVER SCORE
-    /*public Score getScore (Game game){
+   /* public Score getScore (Game game){
         return scores.stream().filter(sc -> sc.getGameID().getId() == game.getId()).findFirst().orElse(null);
     }*/
 }
