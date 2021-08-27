@@ -2,10 +2,21 @@ package com.codeoftheweb.salvo;
 
 import com.codeoftheweb.salvo.Clases.*;
 import com.codeoftheweb.salvo.Repositories.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.authentication.configuration.GlobalAuthenticationConfigurerAdapter;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -110,6 +121,32 @@ public class SalvoApplication {
 			Score score8 = new Score(LocalDateTime.now(), 0.5 , player2, game4);
 			scoreRepository.save(score8);
 		};
+	}
+
+	//SEGURIDAD LOGIN/LOGOUT
+	@Configuration
+	class WebSecurityConfiguration extends GlobalAuthenticationConfigurerAdapter {
+
+		@Autowired
+		PlayerRepository playerRepository;
+
+		@Override
+		public void init(AuthenticationManagerBuilder auth) throws Exception {
+			auth.userDetailsService(inputName -> {
+				Player player = playerRepository.findByUserName(inputName);
+				if (player != null) {
+					return new User(player.getUserName(), player.getPassword(),
+							AuthorityUtils.createAuthorityList("USER"));
+				} else {
+					throw new UsernameNotFoundException("Unknown player: " + inputName);
+				}
+			});
+		}
+
+		@Bean
+		public PasswordEncoder passwordEncoder() {
+			return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+		}
 	}
 }
 

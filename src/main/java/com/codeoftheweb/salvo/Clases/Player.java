@@ -2,6 +2,7 @@ package com.codeoftheweb.salvo.Clases;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
 import java.util.LinkedHashMap;
@@ -40,7 +41,7 @@ public class Player {
         return dto;
     }
 
-    public Player() { }
+    public Player(String userName, String password, List<GrantedAuthority> user) { }
 
     public long getId() {
         return id;
