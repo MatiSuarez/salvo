@@ -12,6 +12,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.authentication.configuration.GlobalAuthenticationConfigurerAdapter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -147,6 +148,22 @@ public class SalvoApplication {
 		public PasswordEncoder passwordEncoder() {
 			return PasswordEncoderFactories.createDelegatingPasswordEncoder();
 		}
+	}
+
+	@EnableWebSecurity
+	@Configuration
+	class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
+		@Override
+		protected void configure(HttpSecurity http) throws Exception {
+			http.authorizeRequests()
+					.antMatchers("/api/login").hasAnyAuthority("PLAYER")
+					.antMatchers("/api/logout").hasAnyAuthority("PLAYER")
+					.antMatchers("/web/games.html").hasAnyAuthority("PLAYER")
+					.and()
+					.formLogin();
+		}
+
 	}
 }
 
