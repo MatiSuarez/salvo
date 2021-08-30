@@ -153,11 +153,11 @@ public class SalvoController {
             @RequestParam String userName, @RequestParam String password ) {
 
         if (userName.isEmpty() || password.isEmpty()) {
-            return new ResponseEntity<>("Missing data", HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>("Faltan completar datos", HttpStatus.FORBIDDEN);
         }
 
         if (playerRepository.findByUserName(userName) != null) {
-            return new ResponseEntity<>("Name already in use", HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>("Usuario existente", HttpStatus.FORBIDDEN);
         }
 
         playerRepository.save(new Player(userName, passwordEncoder.encode(password)));

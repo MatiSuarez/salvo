@@ -40,17 +40,16 @@ public class Player {
         dto.put("email", this.getUserName());
         return dto;
     }
-
-    public Player(String userName, String password, List<GrantedAuthority> user) { }
-
-    public long getId() {
-        return id;
-    }
+    public Player() { }
 
     public Player(String userName, String password) {
 
         this.userName = userName;
         this.password = password;
+    }
+
+    public long getId() {
+        return id;
     }
 
     public String getUserName() {
