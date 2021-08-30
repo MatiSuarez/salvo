@@ -43,22 +43,22 @@ public class SalvoApplication {
 									  ScoreRepository scoreRepository) {
 		return (args) -> {
 
-			Player player1 = new Player ("j.bauer@ctu.gov", passwordEncoder().encode("24"));
-			Player player2 = new Player ("c.obrian@ctu.gov", passwordEncoder().encode("42"));
-			Player player3 = new Player ("t.almeida@ctu.gov",passwordEncoder().encode("mole"));
-			Player player4 = new Player ("kim_bauer@gmail.com",passwordEncoder().encode("kb"));
+			Player player1 = new Player("j.bauer@ctu.gov", passwordEncoder().encode("24"));
+			Player player2 = new Player("c.obrian@ctu.gov", passwordEncoder().encode("42"));
+			Player player3 = new Player("t.almeida@ctu.gov", passwordEncoder().encode("mole"));
+			Player player4 = new Player("kim_bauer@gmail.com", passwordEncoder().encode("kb"));
 			playerRepository.save(player1);
 			playerRepository.save(player2);
 			playerRepository.save(player3);
 			playerRepository.save(player4);
 
 
-			Game game1 = new Game (LocalDateTime.now());
-			Game game2 = new Game (LocalDateTime.now().plusHours(1));
-			Game game3 = new Game (LocalDateTime.now().plusHours(2));
-			Game game4 = new Game (LocalDateTime.now().plusHours(2));
-			Game game5 = new Game (LocalDateTime.now().plusHours(2));
-			Game game6 = new Game (LocalDateTime.now().plusHours(2));
+			Game game1 = new Game(LocalDateTime.now());
+			Game game2 = new Game(LocalDateTime.now().plusHours(1));
+			Game game3 = new Game(LocalDateTime.now().plusHours(2));
+			Game game4 = new Game(LocalDateTime.now().plusHours(2));
+			Game game5 = new Game(LocalDateTime.now().plusHours(2));
+			Game game6 = new Game(LocalDateTime.now().plusHours(2));
 			gameRepository.save(game1);
 			gameRepository.save(game2);
 			gameRepository.save(game3);
@@ -95,11 +95,11 @@ public class SalvoApplication {
 			gamePlayerRepository.save(gameplayer11);
 
 
-			Ship ship1 = new Ship ( "Patrol Boat", gameplayer1, Arrays.asList("B4", "B5"));
+			Ship ship1 = new Ship("Patrol Boat", gameplayer1, Arrays.asList("B4", "B5"));
 			shipRepository.save(ship1);
-			Ship ship2 = new Ship ( "Destroyer", gameplayer1, Arrays.asList("H2", "H3", "H4"));
+			Ship ship2 = new Ship("Destroyer", gameplayer1, Arrays.asList("H2", "H3", "H4"));
 			shipRepository.save(ship2);
-			Ship ship3 = new Ship ( "Submarine", gameplayer2, Arrays.asList("E1", "F1", "G1"));
+			Ship ship3 = new Ship("Submarine", gameplayer2, Arrays.asList("E1", "F1", "G1"));
 			shipRepository.save(ship3);
 
 			Salvo salvo1 = new Salvo(1, gameplayer1, Arrays.asList("E2"));
@@ -120,14 +120,21 @@ public class SalvoApplication {
 			scoreRepository.save(score4);
 			Score score5 = new Score(LocalDateTime.now(), 1, player2, game3);
 			scoreRepository.save(score5);
-			Score score6 = new Score(LocalDateTime.now(), 0 , player3, game3);
+			Score score6 = new Score(LocalDateTime.now(), 0, player3, game3);
 			scoreRepository.save(score6);
 			Score score7 = new Score(LocalDateTime.now(), 0.5, player1, game4);
 			scoreRepository.save(score7);
-			Score score8 = new Score(LocalDateTime.now(), 0.5 , player2, game4);
+			Score score8 = new Score(LocalDateTime.now(), 0.5, player2, game4);
 			scoreRepository.save(score8);
 		};
 	}
+
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+	}
+}
+
 
 	//AUTENTICACION
 	@Configuration
@@ -151,10 +158,6 @@ public class SalvoApplication {
 	}
 
 	//AUTORIZACION
-	@Bean
-	public PasswordEncoder passwordEncoder() {
-		return PasswordEncoderFactories.createDelegatingPasswordEncoder();
-	}
 
 	@EnableWebSecurity
 	@Configuration
@@ -199,6 +202,4 @@ public class SalvoApplication {
 			}
 		}
 	}
-
-}
 
