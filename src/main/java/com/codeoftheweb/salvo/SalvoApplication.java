@@ -170,6 +170,7 @@ public class SalvoApplication {
 					.antMatchers("/api/login").permitAll()
 					.antMatchers("/web/**").permitAll()
 					.antMatchers("/api/games").permitAll()
+					.antMatchers("/api/players").permitAll()
 					.antMatchers("/**").hasAnyAuthority("PLAYER");
 
 			http.formLogin()
