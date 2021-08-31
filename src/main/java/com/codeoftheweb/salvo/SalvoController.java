@@ -158,7 +158,7 @@ public class SalvoController {
     //LOGIN
     @RequestMapping(path = "/players", method = RequestMethod.POST)
     public ResponseEntity<Object> register(
-            @RequestParam String userName, @RequestParam String password ) {
+            @RequestParam (value="email") String userName, @RequestParam (value="password") String password ) {
 
         if (userName.isEmpty() || password.isEmpty()) {
             return new ResponseEntity<>("Faltan completar datos", HttpStatus.FORBIDDEN);
