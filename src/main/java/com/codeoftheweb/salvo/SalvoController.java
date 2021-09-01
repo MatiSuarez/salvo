@@ -46,8 +46,10 @@ public class SalvoController {
         Map<String, Object> dto = new LinkedHashMap<>();
 
         if(!isGuest(authentication)){
-            dto.put("player", playerRepository.findByUserName(authentication.getName()).makePlayerDTO());}
-        else { dto.put("player","Guest");}
+            dto.put("player", playerRepository.findByUserName(authentication.getName()).makePlayerDTO());
+        } else {
+            dto.put("player","Guest");
+        }
 
         dto.put("games", gameRepository.findAll()
                 .stream()
