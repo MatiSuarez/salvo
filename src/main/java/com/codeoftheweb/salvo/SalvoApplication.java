@@ -166,12 +166,11 @@ public class SalvoApplication {
 		@Override
 		protected void configure(HttpSecurity http) throws Exception {
 			http.authorizeRequests()
-					.antMatchers("/login").permitAll()
+					.antMatchers("/game_view/**").hasAnyAuthority("PLAYER")
 					.antMatchers("/api/login").permitAll()
-					.antMatchers("/web/**").permitAll()
+					.antMatchers("/web/games.html").permitAll()
 					.antMatchers("/api/games").permitAll()
-					.antMatchers("/api/players").permitAll()
-					.antMatchers("/**").hasAnyAuthority("PLAYER");
+					.antMatchers("/api/players").permitAll();
 
 			http.formLogin()
 					.usernameParameter("name")
