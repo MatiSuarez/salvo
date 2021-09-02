@@ -65,7 +65,7 @@ public class SalvoController {
 
     if( playerRepository.findByUserName(authentication.getName()).getGamePlayers()
             .stream().anyMatch(gamePlayer1 -> gamePlayer1.getId()==nn)) {
-        return new ResponseEntity<>(makeGameViewDTO(), HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(makeGameViewDTO(gamePlayer), HttpStatus.ACCEPTED);
     } else {
         return new ResponseEntity<>(makeMap("Error", "Gameplayer incorrecto, no hagas trampa!"), HttpStatus.UNAUTHORIZED);
         }
@@ -208,7 +208,7 @@ public class SalvoController {
 
 
 
-    private Map<String, Object> makeGameViewDTO (GamePlayer gamePlayer, Salvo salvo) {
+    private Map<String, Object> makeGameViewDTO (GamePlayer gamePlayer) {
         Map <String, Object> dto = new LinkedHashMap<String, Object>();
         dto.put("id", gamePlayer.getGameID().getId());
         dto.put("created", gamePlayer.getGameID().getCreationDate());
