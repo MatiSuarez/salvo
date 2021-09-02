@@ -113,7 +113,7 @@ public class SalvoController {
 
 
     //UNIRSE A UN JUEGO
-    @PostMapping("/games/{nn}/players")
+    @PostMapping("/game/{nn}/players")
     public ResponseEntity<Map<String, Object>> joinGame(@PathVariable Long nn, Authentication authentication) {
 
         if(!isGuest(authentication)) {
