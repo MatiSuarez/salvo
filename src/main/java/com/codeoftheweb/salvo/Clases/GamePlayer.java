@@ -38,6 +38,9 @@ public class GamePlayer {
         this.gameID = gameID;
     }
 
+    public void setId(long id) {
+        this.id = id;
+    }
 
     public long getId() {
         return id;

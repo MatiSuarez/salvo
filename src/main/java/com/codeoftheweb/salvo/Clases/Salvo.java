@@ -65,6 +65,11 @@ public class Salvo {
     public void setSalvoID(GamePlayer salvoID) {
         this.salvoID = salvoID;
     }
+
+    public List<String> getHits(){
+        List<String> hits = new ArrayList<>();
+        return hits;
+    }
 }
 
 

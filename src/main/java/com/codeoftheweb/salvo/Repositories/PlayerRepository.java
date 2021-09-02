@@ -10,5 +10,5 @@ import java.util.List;
 @RepositoryRestResource
 public interface PlayerRepository extends JpaRepository<Player, Long> {
 
-    Player findByUserName(String userName);
+    Player findByUserName(@Param("userName") String userName);
 }

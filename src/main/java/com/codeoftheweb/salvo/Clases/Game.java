@@ -31,9 +31,6 @@ public class Game {
 
     public Game() { }
 
-    public long getId() {
-        return id;
-    }
 
     public Game(LocalDateTime creationDate) {
         this.creationDate = creationDate;
@@ -45,6 +42,13 @@ public class Game {
 
     public void setCreationDate(LocalDateTime creationDate) {
         this.creationDate = creationDate;
+    }
+
+    public long getId() {
+        return id;
+    }
+    public void setId(long id) {
+        this.id = id;
     }
 
     public Set<GamePlayer> getGamePlayers() {
