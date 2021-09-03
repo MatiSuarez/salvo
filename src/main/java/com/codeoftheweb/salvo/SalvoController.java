@@ -97,16 +97,20 @@ public class SalvoController {
     //CREAR JUEGO
     @PostMapping("/games")
     public ResponseEntity<Map<String, Object>> createGame(Authentication authentication) {
-        
-            Game newGame = new Game(LocalDateTime.now());
-            gameRepository.save(newGame);
 
-            Player auth = playerRepository.findByUserName(authentication.getName());
+            if (!isGuest(authentication)) {
+                Game newGame = new Game(LocalDateTime.now());
+                gameRepository.save(newGame);
 
-            GamePlayer gamePlayer = new GamePlayer(LocalDateTime.now(), auth, newGame);
-            gamePlayerRepository.save(gamePlayer);
-            return new ResponseEntity<>(makeMap("gpid", gamePlayer.getId()), HttpStatus.CREATED);
-            
+                Player auth = playerRepository.findByUserName(authentication.getName());
+
+                GamePlayer gamePlayer = new GamePlayer(LocalDateTime.now(), auth, newGame);
+                gamePlayerRepository.save(gamePlayer);
+                return new ResponseEntity<>(makeMap("gpid", gamePlayer.getId()), HttpStatus.CREATED);
+
+            }else{
+                return new ResponseEntity<>(makeMap("Error", "Sin accso.Debes iniciar sesión!"), HttpStatus.UNAUTHORIZED);
+            }
     }
 
 
