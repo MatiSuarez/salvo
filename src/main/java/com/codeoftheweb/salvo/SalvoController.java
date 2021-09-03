@@ -95,20 +95,18 @@ public class SalvoController {
     }
 
     //CREAR JUEGO
-    @PostMapping("/game")
-    public ResponseEntity<Map<String, Object>> createGame(LocalDateTime creationDate, Authentication authentication) {
-
-        if (!isGuest(authentication)) {
+    @PostMapping("/games")
+    public ResponseEntity<Map<String, Object>> createGame(Authentication authentication) {
+        
             Game newGame = new Game(LocalDateTime.now());
             gameRepository.save(newGame);
+
             Player auth = playerRepository.findByUserName(authentication.getName());
+
             GamePlayer gamePlayer = new GamePlayer(LocalDateTime.now(), auth, newGame);
             gamePlayerRepository.save(gamePlayer);
             return new ResponseEntity<>(makeMap("gpid", gamePlayer.getId()), HttpStatus.CREATED);
-
-        } else {
-            return  new ResponseEntity<>(makeMap("Error", "Debes iniciar sesión!"), HttpStatus.UNAUTHORIZED);
-        }
+            
     }
 
 
@@ -225,10 +223,7 @@ public class SalvoController {
                 .stream()
                 .flatMap(slv -> slv.getSalvoes()
                         .stream().map(slv1 -> makeSalvoDTO(slv1))).collect(Collectors.toList()));
-        dto.put("hits", gamePlayer.getSalvoes().
-                stream()
-                .map( hts -> makeHitsDTO(hts))
-                .collect(Collectors.toList()));
+        dto.put("hits", makeHitsDTO());
 
         // UTILIZANDO 'FOR' PARA SALVO
         /*List <Map <String, Object>> listAux= new ArrayList<>();
@@ -247,12 +242,14 @@ public class SalvoController {
         return dto;
     }
 
-    public Map<String, Object> makeHitsDTO(Salvo salvo){
+    public Map<String, Object> makeHitsDTO(){
         Map<String, Object> dto = new LinkedHashMap<>();
-        dto.put("self", salvo.getTurn());
-        dto.put("opponent",salvo.getHits());
+        List<String>  lst = new ArrayList<>();
+        dto.put("self", lst);
+        dto.put("opponent", lst);
         return dto;
     }
+
 
     //FIN DE LOS DTOS
 
