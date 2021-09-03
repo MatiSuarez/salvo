@@ -124,7 +124,10 @@ public class SalvoController {
 
             if (game.isPresent()) {
                 if(game.get().getGamePlayers().size() < 2) {
-                    if (game.get().getGamePlayers().stream().anyMatch( jg->jg.getPlayerID().getId() != auth.getId())) {
+                    if (game.get()
+                            .getGamePlayers()
+                            .stream()
+                            .anyMatch( jg -> jg.getPlayerID().getId() != auth.getId())) {
 
                         GamePlayer gamePlayer = new GamePlayer(LocalDateTime.now(), auth, game.get());
                         gamePlayerRepository.save(gamePlayer);
