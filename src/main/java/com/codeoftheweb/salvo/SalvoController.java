@@ -121,6 +121,7 @@ public class SalvoController {
         if(!isGuest(authentication)) {
             Optional<Game> game = gameRepository.findById(nn);
             Player auth = playerRepository.findByUserName(authentication.getName());
+
             if (game.isPresent()) {
                 if(game.get().getGamePlayers().size() < 2) {
                     if (game.get().getGamePlayers().stream().anyMatch( jg->jg.getPlayerID().getId() != auth.getId())) {
