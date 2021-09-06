@@ -114,7 +114,7 @@ public class SalvoController {
                 return new ResponseEntity<>(makeMap("gpid", gamePlayer.getId()), HttpStatus.CREATED);
 
             } else {
-                return new ResponseEntity<>(makeMap("Error", "Sin accso.Debes iniciar sesión!"), HttpStatus.UNAUTHORIZED);
+                return new ResponseEntity<>(makeMap("Error", "Sin accso, debes iniciar sesión!"), HttpStatus.UNAUTHORIZED);
             }
     }
 
