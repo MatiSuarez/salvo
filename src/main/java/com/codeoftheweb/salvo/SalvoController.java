@@ -62,6 +62,9 @@ public class SalvoController {
     @RequestMapping("/game_view/{nn}")
     public ResponseEntity<Map <String, Object>> findGame(@PathVariable Long nn, Authentication authentication) {
         GamePlayer gamePlayer = gamePlayerRepository.getById(nn);
+    if(isGuest(authentication)){
+        return new ResponseEntity<>(makeMap("Error", "No has iniciado sesión"), HttpStatus.UNAUTHORIZED);
+    }
 
     if( playerRepository.findByUserName(authentication.getName()).getGamePlayers()
             .stream().anyMatch(gamePlayer1 -> gamePlayer1.getId()==nn)) {
