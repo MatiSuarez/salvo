@@ -62,6 +62,7 @@ public class SalvoController {
     @RequestMapping("/game_view/{nn}")
     public ResponseEntity<Map <String, Object>> findGame(@PathVariable Long nn, Authentication authentication) {
         GamePlayer gamePlayer = gamePlayerRepository.getById(nn);
+
     if(isGuest(authentication)){
         return new ResponseEntity<>(makeMap("Error", "No has iniciado sesión"), HttpStatus.UNAUTHORIZED);
     }
@@ -69,8 +70,9 @@ public class SalvoController {
     if( playerRepository.findByUserName(authentication.getName()).getGamePlayers()
             .stream().anyMatch(gamePlayer1 -> gamePlayer1.getId()==nn)) {
         return new ResponseEntity<>(makeGameViewDTO(gamePlayer), HttpStatus.ACCEPTED);
+
     } else {
-        return new ResponseEntity<>(makeMap("Error", "Gameplayer incorrecto, no hagas trampa!"), HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(makeMap("Error", "Player incorrecto, no hagas trampa!"), HttpStatus.UNAUTHORIZED);
         }
     }
 
