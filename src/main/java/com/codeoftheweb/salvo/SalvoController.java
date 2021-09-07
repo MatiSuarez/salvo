@@ -160,9 +160,7 @@ public class SalvoController {
 
     //UBICACION BARCOS
     @PostMapping (path= "/games/players/{gamePlayerId}/ships")
-        public ResponseEntity<Map<String, Object>> createShips(@PathVariable Long gamePlayerId,
-                                                               @RequestBody List<Ship> ships,
-                                                               Authentication authentication) {
+        public ResponseEntity<Map<String, Object>> createShips(@PathVariable Long gamePlayerId, @RequestBody List<Ship> ships, Authentication authentication) {
 
         if (!isGuest(authentication)) {
             Optional<GamePlayer> gamePlayer = gamePlayerRepository.findById(gamePlayerId);
