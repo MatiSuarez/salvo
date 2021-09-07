@@ -2,9 +2,7 @@ package com.codeoftheweb.salvo;
 
 import com.codeoftheweb.salvo.Clases.*;
 import com.codeoftheweb.salvo.Repositories.*;
-import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -12,7 +10,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import javax.swing.text.html.Option;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -163,9 +160,9 @@ public class SalvoController {
 
     //UBICACION BARCOS
     @PostMapping (path= "/games/players/{gamePlayerId}/ships")
-        public ResponseEntity<Map<String, Object>> shipsLocations(@PathVariable Long gamePlayerId,
-                                                                  @RequestBody List<Ship> ships,
-                                                                  Authentication authentication) {
+        public ResponseEntity<Map<String, Object>> createShips(@PathVariable Long gamePlayerId,
+                                                               @RequestBody List<Ship> ships,
+                                                               Authentication authentication) {
 
         if (!isGuest(authentication)) {
             Optional<GamePlayer> gamePlayer = gamePlayerRepository.findById(gamePlayerId);
@@ -175,23 +172,29 @@ public class SalvoController {
 
                 if (authPlayer.getId() == gamePlayer.get().getPlayerID().getId()) {
                     if (gamePlayer.get().getShips().size() == 0) {
+
                         if (ships.size() == 5) {
                             for (Ship ship : ships) {
-                                shipRepository.save(new Ship(ship.getShipType(), gamePlayer.get(), ship.getLocations()));
+                                shipRepository.save(new Ship(ship.getType(), gamePlayer.get(), ship.getLocations()));
                             }
                             return new ResponseEntity<>(makeMap("gpid", gamePlayer.get().getId()), HttpStatus.CREATED);
+
                         } else {
-                            return new ResponseEntity<>(makeMap("Error", "Los 5 barcos no fueron creados!"), HttpStatus.BAD_REQUEST);
+                            return new ResponseEntity<>(makeMap("Error", "Los 5 barcos no fueron creados!"), HttpStatus.FORBIDDEN);
                         }
+
                     } else {
-                        return new ResponseEntity<>(makeMap("Error", "Los 5 barcos ya fueron creados!"), HttpStatus.BAD_REQUEST);
+                        return new ResponseEntity<>(makeMap("Error", "Los 5 barcos ya fueron creados!"), HttpStatus.FORBIDDEN);
                         }
+
                    } else {
                         return new ResponseEntity<>(makeMap("Error", "El GamePlayer no corresponde a esta partida!"), HttpStatus.FORBIDDEN);
                         }
+
                 } else {
                 return new ResponseEntity<>(makeMap("Error", "El GamePlayer no existe"), HttpStatus.NOT_FOUND);
                         }
+
             } else {
             return new ResponseEntity<>(makeMap("Error", "Debes iniciar sesión!"), HttpStatus.UNAUTHORIZED);
                     }
@@ -246,7 +249,7 @@ public class SalvoController {
 
     public Map<String, Object> makeShipDTO(Ship ship){
         Map<String, Object> dto = new LinkedHashMap<>();
-        dto.put("type", ship.getShipType());
+        dto.put("type", ship.getType());
         dto.put("locations", ship.getLocations());
         return dto;
     }
@@ -304,7 +307,6 @@ public class SalvoController {
         dto.put("opponent", lst);
         return dto;
     }
-
 
     //FIN DE LOS DTOS
 
