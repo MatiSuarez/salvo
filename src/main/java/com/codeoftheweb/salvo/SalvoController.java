@@ -175,43 +175,20 @@ public class SalvoController {
                         if (ships.size() == 5) {
                             for (Ship newShip : ships) {
                                 shipRepository.save(new Ship(newShip.getType(), gamePlayer.get(), newShip.getShipLocations()));
-
-                                //NO MODIFICAR TAMAÑO DE BARCOS
-                                if (newShip.getType()=="carrier" && newShip.getShipLocations().size() != 5){
-                                    return new ResponseEntity<>(makeMap("Error", "No se puede modificar el tamaño de los barcos, es trampa!"), HttpStatus.NOT_FOUND);
-                                }
-
-                                if (newShip.getType()=="batleship" && newShip.getShipLocations().size() != 4){
-                                    return new ResponseEntity<>(makeMap("Error", "No se puede modificar el tamaño de los barcos, es trampa!"), HttpStatus.NOT_FOUND);
-                                }
-
-                                if (newShip.getType()=="submarine" || newShip.getType()=="destroyer" && newShip.getShipLocations().size() != 3){
-                                    return new ResponseEntity<>(makeMap("Error", "No se puede modificar el tamaño de los barcos, es trampa!"), HttpStatus.NOT_FOUND);
-                                }
-
-                                if (newShip.getType()=="patrolboat" && newShip.getShipLocations().size() != 2){
-                                    return new ResponseEntity<>(makeMap("Error", "No se puede modificar el tamaño de los barcos, es trampa!"), HttpStatus.NOT_FOUND);
-                                }
-
                             }
                             return new ResponseEntity<>(makeMap("gpid", gamePlayer.get().getId()), HttpStatus.CREATED);
-
                         } else {
                             return new ResponseEntity<>(makeMap("Error", "Los 5 barcos no fueron creados!"), HttpStatus.FORBIDDEN);
                         }
-
                     } else {
                         return new ResponseEntity<>(makeMap("Error", "Los 5 barcos ya fueron creados!"), HttpStatus.FORBIDDEN);
                         }
-
                    } else {
                         return new ResponseEntity<>(makeMap("Error", "El GamePlayer no corresponde a esta partida!"), HttpStatus.FORBIDDEN);
                         }
-
                 } else {
                 return new ResponseEntity<>(makeMap("Error", "El GamePlayer no existe"), HttpStatus.NOT_FOUND);
                         }
-
             } else {
             return new ResponseEntity<>(makeMap("Error", "Debes iniciar sesión!"), HttpStatus.UNAUTHORIZED);
                     }
