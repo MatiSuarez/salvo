@@ -21,14 +21,14 @@ public class Ship {
 
     @ElementCollection
     @Column(name="locations")
-    private List<String> locations = new ArrayList<>();
+    private List<String> shipLocations = new ArrayList<>();
 
     public Ship (){ }
 
-    public Ship(String type, GamePlayer gamePlayerID, List<String> locations) {
+    public Ship(String type, GamePlayer gamePlayerID, List<String> shipLocations) {
         this.type = type;
         this.gamePlayerID = gamePlayerID;
-        this.locations = locations;
+        this.shipLocations = shipLocations;
     }
 
 
@@ -56,11 +56,11 @@ public class Ship {
         this.gamePlayerID = gamePlayerID;
     }
 
-    public List<String> getLocations() {
-        return locations;
+    public List<String> getShipLocations() {
+        return shipLocations;
     }
 
-    public void setLocations(List<String> locations) {
-        this.locations = locations;
+    public void setShipLocations(List<String> shipLocations) {
+        this.shipLocations = shipLocations;
     }
 }

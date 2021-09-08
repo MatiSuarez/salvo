@@ -173,7 +173,7 @@ public class SalvoController {
 
                         if (ships.size() == 5) {
                             for (Ship ship : ships) {
-                                shipRepository.save(new Ship(ship.getType(), gamePlayer.get(), ship.getLocations()));
+                                shipRepository.save(new Ship(ship.getType(), gamePlayer.get(), ship.getShipLocations()));
                             }
                             return new ResponseEntity<>(makeMap("gpid", gamePlayer.get().getId()), HttpStatus.CREATED);
 
@@ -248,7 +248,7 @@ public class SalvoController {
     public Map<String, Object> makeShipDTO(Ship ship){
         Map<String, Object> dto = new LinkedHashMap<>();
         dto.put("type", ship.getType());
-        dto.put("locations", ship.getLocations());
+        dto.put("locations", ship.getShipLocations());
         return dto;
     }
 
