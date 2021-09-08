@@ -170,8 +170,6 @@ public class SalvoController {
 
                 if (authPlayer.getId() == gamePlayer.get().getPlayerID().getId()) {
                     if (gamePlayer.get().getShips().size() == 0) {
-
-                        //NO MODIFICAR CANTIDAD DE BARCOS
                         if (ships.size() == 5) {
                             for (Ship newShip : ships) {
                                 shipRepository.save(new Ship(newShip.getType(), gamePlayer.get(), newShip.getShipLocations()));
