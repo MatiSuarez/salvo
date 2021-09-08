@@ -171,9 +171,28 @@ public class SalvoController {
                 if (authPlayer.getId() == gamePlayer.get().getPlayerID().getId()) {
                     if (gamePlayer.get().getShips().size() == 0) {
 
+                        //NO MODIFICAR CANTIDAD DE BARCOS
                         if (ships.size() == 5) {
-                            for (Ship ship : ships) {
-                                shipRepository.save(new Ship(ship.getType(), gamePlayer.get(), ship.getShipLocations()));
+                            for (Ship newShip : ships) {
+                                shipRepository.save(new Ship(newShip.getType(), gamePlayer.get(), newShip.getShipLocations()));
+
+                                //NO MODIFICAR TAMAÑO DE BARCOS
+                                if (newShip.getType()=="carrier" && newShip.getShipLocations().size() != 5){
+                                    return new ResponseEntity<>(makeMap("Error", "No se puede modificar el tamaño de los barcos, es trampa!"), HttpStatus.NOT_FOUND);
+                                }
+
+                                if (newShip.getType()=="batleship" && newShip.getShipLocations().size() != 4){
+                                    return new ResponseEntity<>(makeMap("Error", "No se puede modificar el tamaño de los barcos, es trampa!"), HttpStatus.NOT_FOUND);
+                                }
+
+                                if (newShip.getType()=="submarine" || newShip.getType()=="destroyer" && newShip.getShipLocations().size() != 3){
+                                    return new ResponseEntity<>(makeMap("Error", "No se puede modificar el tamaño de los barcos, es trampa!"), HttpStatus.NOT_FOUND);
+                                }
+
+                                if (newShip.getType()=="patrolboat" && newShip.getShipLocations().size() != 2){
+                                    return new ResponseEntity<>(makeMap("Error", "No se puede modificar el tamaño de los barcos, es trampa!"), HttpStatus.NOT_FOUND);
+                                }
+
                             }
                             return new ResponseEntity<>(makeMap("gpid", gamePlayer.get().getId()), HttpStatus.CREATED);
 
@@ -305,9 +324,6 @@ public class SalvoController {
         dto.put("opponent", lst);
         return dto;
     }
-
-    //FIN DE LOS DTOS
-
 }
 
 
