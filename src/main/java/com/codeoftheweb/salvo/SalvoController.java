@@ -171,6 +171,7 @@ public class SalvoController {
                                 shipRepository.save(new Ship(newShip.getType(), gamePlayer.get(), newShip.getShipLocations()));
                             }
                             return new ResponseEntity<>(makeMap("gpid", gamePlayer.get().getId()), HttpStatus.CREATED);
+
                         } else {
                             return new ResponseEntity<>(makeMap("Error", "Los 5 barcos no fueron creados!"), HttpStatus.FORBIDDEN);
                         }
