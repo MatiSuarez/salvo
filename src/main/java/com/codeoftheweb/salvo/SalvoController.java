@@ -164,9 +164,9 @@ public class SalvoController {
             Optional<GamePlayer> gamePlayer = gamePlayerRepository.findById(gamePlayerId);
 
             if (gamePlayer.isPresent()) {
-                Player authPlayer = playerRepository.findByUserName(authentication.getName());
+                Player currentPlayer = playerRepository.findByUserName(authentication.getName());
 
-                if (authPlayer.getId() == gamePlayer.get().getPlayerID().getId()) {
+                if (currentPlayer.getId() == gamePlayer.get().getPlayerID().getId()) {
                     if (gamePlayer.get().getShips().size() == 0) {
                         if (ships.size() == 5) {
                             for (Ship newShip : ships) {
@@ -196,8 +196,8 @@ public class SalvoController {
             Map<String, Object> dto = new LinkedHashMap<>();
             dto.put("ship", gamePlayerRepository.findById(gameplayerid).get().getShips().stream().map(this::makeShipDTO).collect(Collectors.toList()));
             return new ResponseEntity<>(dto, HttpStatus.CREATED);
-            return new ResponseEntity<>(makeMap("Error","Gameplayer inexistente"), HttpStatus.FORBIDDEN);
         }
+        return new ResponseEntity<>(makeMap("Error","Gameplayer inexistente"), HttpStatus.FORBIDDEN);
     }
 
 
