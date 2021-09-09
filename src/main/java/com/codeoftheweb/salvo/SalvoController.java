@@ -168,7 +168,24 @@ public class SalvoController {
                     if (gamePlayer.get().getShips().size() > 0) {
                         if (ships.size() != 5) {
                             for (Ship newShip : ships) {
-                                shipRepository.save(new Ship(newShip.getType(), gamePlayer.get(), newShip.getShipLocations()));
+
+                                    if (newShip.getType().equals("carrier") && newShip.getShipLocations().size() != 5) {
+                                        return new ResponseEntity<>(makeMap("Error", "El Carrier debe ocupar 5 casilleros"), HttpStatus.FORBIDDEN);
+                                    }
+                                    if (newShip.getType().equals("battleship") && newShip.getShipLocations().size() != 4) {
+                                    return new ResponseEntity<>(makeMap("Error", "El Battleship debe ocupar 3 casilleros"), HttpStatus.FORBIDDEN);
+                                    }
+                                    if (newShip.getType().equals("submarine") && newShip.getShipLocations().size() != 3) {
+                                    return new ResponseEntity<>(makeMap("Error", "El submarine debe ocupar 3 casilleros"), HttpStatus.FORBIDDEN);
+                                    }
+                                    if (newShip.getType().equals("destroyer") && newShip.getShipLocations().size() != 3) {
+                                    return new ResponseEntity<>(makeMap("Error", "El destroyer debe ocupar 3 casilleros"), HttpStatus.FORBIDDEN);
+                                    }
+                                    if (newShip.getType().equals("patrolboat") && newShip.getShipLocations().size() != 2) {
+                                    return new ResponseEntity<>(makeMap("Error", "El patrolboat debe ocupar 3 casilleros"), HttpStatus.FORBIDDEN);
+                                    } else {
+                                        shipRepository.save(new Ship(newShip.getType(), gamePlayer.get(), newShip.getShipLocations()));
+                                    }
                             }
                             return new ResponseEntity<>(makeMap("gpid", gamePlayer.get().getId()), HttpStatus.CREATED);
 
@@ -189,13 +206,15 @@ public class SalvoController {
                     }
     }
 
-    @RequestMapping(value="/games/players/{gameplayerid}/ships", method = RequestMethod.GET)
-    public ResponseEntity<Map> placeShips(@PathVariable Long gameplayerid, Authentication authentication) {
+    @GetMapping("/games/players/{gameplayerid}/ships")
+    public ResponseEntity<Map> getShips(@PathVariable Long gameplayerid, Authentication authentication) {
+
         if (gamePlayerRepository.findById(gameplayerid).isPresent()) {
             Map<String, Object> dto = new LinkedHashMap<>();
             dto.put("ship", gamePlayerRepository.findById(gameplayerid).get().getShips().stream().map(this::makeShipDTO).collect(Collectors.toList()));
             return new ResponseEntity<>(dto, HttpStatus.CREATED);
         }
+
         return new ResponseEntity<>(makeMap("Error", "Gameplayer inexistente"), HttpStatus.FORBIDDEN);
     }
 
