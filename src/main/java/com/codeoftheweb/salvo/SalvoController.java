@@ -159,16 +159,14 @@ public class SalvoController {
     //UBICACION BARCOS
     @PostMapping (path= "/games/players/{gamePlayerId}/ships")
         public ResponseEntity<Map<String, Object>> createShips(@PathVariable Long gamePlayerId, @RequestBody List<Ship> ships, Authentication authentication) {
+        Optional<GamePlayer> gamePlayer = gamePlayerRepository.findById(gamePlayerId);
 
         if (!isGuest(authentication)) {
-            Optional<GamePlayer> gamePlayer = gamePlayerRepository.findById(gamePlayerId);
-
             if (gamePlayer.isPresent()) {
                 Player currentPlayer = playerRepository.findByUserName(authentication.getName());
-
                 if (currentPlayer.getId() == gamePlayer.get().getPlayerID().getId()) {
-                    if (gamePlayer.get().getShips().size() == 0) {
-                        if (ships.size() == 5) {
+                    if (gamePlayer.get().getShips().size() > 0) {
+                        if (ships.size() != 5) {
                             for (Ship newShip : ships) {
                                 shipRepository.save(new Ship(newShip.getType(), gamePlayer.get(), newShip.getShipLocations()));
                             }
@@ -180,7 +178,7 @@ public class SalvoController {
                         return new ResponseEntity<>(makeMap("Error", "Los 5 barcos ya fueron creados!"), HttpStatus.FORBIDDEN);
                         }
                    } else {
-                        return new ResponseEntity<>(makeMap("Error", "El GamePlayer no corresponde a esta partida!"), HttpStatus.FORBIDDEN);
+                        return new ResponseEntity<>(makeMap("Error", "El GamePlayer no corresponde a esta partida!"), HttpStatus.UNAUTHORIZED);
                         }
                 } else {
                 return new ResponseEntity<>(makeMap("Error", "El GamePlayer no existe"), HttpStatus.NOT_FOUND);
@@ -192,12 +190,12 @@ public class SalvoController {
 
     @RequestMapping(value="/games/players/{gameplayerid}/ships", method = RequestMethod.GET)
     public ResponseEntity<Map> placeShips(@PathVariable Long gameplayerid, Authentication authentication) {
-        if(gamePlayerRepository.findById(gameplayerid).isPresent()){
+        if (gamePlayerRepository.findById(gameplayerid).isPresent()) {
             Map<String, Object> dto = new LinkedHashMap<>();
             dto.put("ship", gamePlayerRepository.findById(gameplayerid).get().getShips().stream().map(this::makeShipDTO).collect(Collectors.toList()));
             return new ResponseEntity<>(dto, HttpStatus.CREATED);
         }
-        return new ResponseEntity<>(makeMap("Error","Gameplayer inexistente"), HttpStatus.FORBIDDEN);
+        return new ResponseEntity<>(makeMap("Error", "Gameplayer inexistente"), HttpStatus.FORBIDDEN);
     }
 
 
