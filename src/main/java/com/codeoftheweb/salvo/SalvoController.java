@@ -76,9 +76,7 @@ public class SalvoController {
 
     //CREAR NUEVO JUGADOR
     @RequestMapping(path = "/players", method = RequestMethod.POST)
-    public ResponseEntity<Object> register(
-            @RequestParam(value = "email") String userName,
-            @RequestParam(value = "password") String password) {
+    public ResponseEntity<Object> register(@RequestParam(value = "email") String userName, @RequestParam(value = "password") String password) {
 
         if (userName.isEmpty() || password.isEmpty()) {
             return new ResponseEntity<>("Faltan completar datos", HttpStatus.FORBIDDEN);
@@ -190,6 +188,16 @@ public class SalvoController {
             } else {
             return new ResponseEntity<>(makeMap("Error", "Debes iniciar sesión!"), HttpStatus.UNAUTHORIZED);
                     }
+    }
+
+    @RequestMapping(value="/games/players/{gameplayerid}/ships", method = RequestMethod.GET)
+    public ResponseEntity<Map> placeShips(@PathVariable Long gameplayerid, Authentication authentication) {
+        if(gamePlayerRepository.findById(gameplayerid).isPresent()){
+            Map<String, Object> dto = new LinkedHashMap<>();
+            dto.put("ship", gamePlayerRepository.findById(gameplayerid).get().getShips().stream().map(this::makeShipDTO).collect(Collectors.toList()));
+            return new ResponseEntity<>(dto, HttpStatus.CREATED);
+            return new ResponseEntity<>(makeMap("Error","Gameplayer inexistente"), HttpStatus.FORBIDDEN);
+        }
     }
 
 
