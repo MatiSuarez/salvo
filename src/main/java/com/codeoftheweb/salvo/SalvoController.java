@@ -188,7 +188,7 @@ public class SalvoController {
             }
 
         } else {
-            return new ResponseEntity<>(makeMap("Error", "Debes iniciar sesión!"), HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(makeMap("Error", "Tenes iniciar sesión!"), HttpStatus.UNAUTHORIZED);
         }
     }
 
@@ -208,19 +208,20 @@ public class SalvoController {
     //UBICACION SALVOS
     @PostMapping(path = "/games/players/{gamePlayerId}/salvoes")
     public ResponseEntity<Map<String, Object>> placeSalvoes(@PathVariable Long gamePlayerId, @RequestBody Salvo salvo, Authentication authentication) {
+        Optional<GamePlayer> gamePlayer = gamePlayerRepository.findById(gamePlayerId);
 
         if (!isGuest(authentication)) {
-            Optional<GamePlayer> gamePlayer = gamePlayerRepository.findById(gamePlayerId);
             if (gamePlayer.isPresent()) {
                 Player currentPlayer = playerRepository.findByUserName(authentication.getName());
                 if (currentPlayer.getId() == gamePlayer.get().getPlayerID().getId()) {
                     if (gamePlayer.get().getSalvoes().size() + 1 == salvo.getTurn()) {
                         Optional<GamePlayer> rival = gamePlayer.get().getOpponent();
-
                         if (rival.isPresent()) {
-                            salvoRepository.save(new Salvo(salvo.getTurn(), gamePlayer.get(), salvo.getSalvoLocations()));
-                            return new ResponseEntity<>(makeMap("Turno", salvo.getTurn()), HttpStatus.CREATED);
-                        } else {
+
+                            Salvo currentSalvo = new Salvo(salvo.getTurn(), gamePlayer.get(), salvo.getSalvoLocations());
+                            salvoRepository.save(currentSalvo);
+                        return new ResponseEntity<>(makeMap("Turno", salvo.getTurn()), HttpStatus.CREATED);
+                    } else {
                             return new ResponseEntity<>(makeMap("Error", "Todavia no es tu turno!"), HttpStatus.FORBIDDEN);
                         }
                     } else {
