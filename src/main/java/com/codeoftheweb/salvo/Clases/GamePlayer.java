@@ -3,6 +3,7 @@ package com.codeoftheweb.salvo.Clases;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.util.Optional;
 import java.util.Set;
 import java.time.LocalDateTime;
 
@@ -87,6 +88,9 @@ public class GamePlayer {
         this.salvoes = salvoes;
     }
 
+    public Optional<GamePlayer> getOpponent() {
+        return this.getGameID().getGamePlayers().stream().filter(gp -> gp.getId() != this.getId()).findFirst();
+    }
 
     ////OTRA FORMA DE RESOLVER SCORE
     /*public  Score getScore(){
