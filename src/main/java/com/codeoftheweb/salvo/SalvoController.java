@@ -217,11 +217,15 @@ public class SalvoController {
                     if (gamePlayer.get().getSalvoes().size() + 1 == salvo.getTurn()) {
                         Optional<GamePlayer> rival = gamePlayer.get().getOpponent();
                         if (rival.isPresent()) {
+                            if (gamePlayer.get().getShips().size() == 5) {
 
-                            Salvo currentSalvo = new Salvo(salvo.getTurn() + 1, gamePlayer.get(), salvo.getSalvoLocations());
-                            salvoRepository.save(currentSalvo);
-                        return new ResponseEntity<>(makeMap("Turno", salvo.getTurn() + 1), HttpStatus.CREATED);
-                    } else {
+                                Salvo currentSalvo = new Salvo(salvo.getTurn() + 1, gamePlayer.get(), salvo.getSalvoLocations());
+                                salvoRepository.save(currentSalvo);
+                                return new ResponseEntity<>(makeMap("Turno", salvo.getTurn() + 1), HttpStatus.CREATED);
+                            } else {
+                                return new ResponseEntity<>(makeMap("Error", "Deben estar los 5 barcos colocados!"), HttpStatus.FORBIDDEN);
+                            }
+                        } else {
                             return new ResponseEntity<>(makeMap("Error", "Todavia no es tu turno!"), HttpStatus.FORBIDDEN);
                         }
                     } else {
@@ -232,18 +236,8 @@ public class SalvoController {
                             return new ResponseEntity<>(makeMap("Turno", salvo.getTurn() + 1), HttpStatus.CREATED);
                         } else {
                             return new ResponseEntity<>(makeMap("Error", "Tenes que esperar a un rival!"), HttpStatus.FORBIDDEN);
+                            }
                         }
-                    } else {
-
-                        //SI NO ESTAN LOS BARCOS COLOCADOS
-                        if (gamePlayer.get().getShips().size() == 5) {
-                            salvoRepository.save(new Salvo(salvo.getTurn() + 1, gamePlayer.get(), salvo.getSalvoLocations()));
-                            return new ResponseEntity<>(makeMap("Turno", salvo.getTurn() + 1), HttpStatus.CREATED);
-                        } else {
-                            return new ResponseEntity<>(makeMap("Error", "Deben estar los 5 barcos colocados!"), HttpStatus.FORBIDDEN);
-                        }
-                    }
-
                 } else {
 
                     //SI NO SE CUMPLE LO ANTERIOR
