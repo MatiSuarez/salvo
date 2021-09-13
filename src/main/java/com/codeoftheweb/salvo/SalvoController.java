@@ -218,13 +218,17 @@ public class SalvoController {
                         Optional<GamePlayer> rival = gamePlayer.get().getOpponent();
                         if (rival.isPresent()) {
                             if (gamePlayer.get().getShips().size() == 5) {
+                                if (salvo.getSalvoLocations().size() >= 5) {
 
-                                Salvo currentSalvo = new Salvo(salvo.getTurn() + 1, gamePlayer.get(), salvo.getSalvoLocations());
-                                salvoRepository.save(currentSalvo);
-                                return new ResponseEntity<>(makeMap("Turno", salvo.getTurn() + 1), HttpStatus.CREATED);
+                                    Salvo currentSalvo = new Salvo(salvo.getTurn() + 1, gamePlayer.get(), salvo.getSalvoLocations());
+                                    salvoRepository.save(currentSalvo);
+                                    return new ResponseEntity<>(makeMap("Turno", salvo.getTurn() + 1), HttpStatus.CREATED);
+                                } else {
+                                    return new ResponseEntity<>(makeMap("Error", "No se puden usar mas de 5 salvos en un mismo turno!"), HttpStatus.FORBIDDEN);
+                                }
                             } else {
-                                return new ResponseEntity<>(makeMap("Error", "Deben estar los 5 barcos colocados!"), HttpStatus.FORBIDDEN);
-                            }
+                                    return new ResponseEntity<>(makeMap("Error", "Deben estar los 5 barcos colocados!"), HttpStatus.FORBIDDEN);
+                                }
                         } else {
                             return new ResponseEntity<>(makeMap("Error", "Todavia no es tu turno!"), HttpStatus.FORBIDDEN);
                         }
