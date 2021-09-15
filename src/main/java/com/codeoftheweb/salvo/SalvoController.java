@@ -74,6 +74,11 @@ public class SalvoController {
     }
 
 
+    private boolean isGuest(Authentication authentication) {
+        return authentication == null || authentication instanceof AnonymousAuthenticationToken;
+    }
+
+
     //CREAR NUEVO JUGADOR
     @RequestMapping(path = "/players", method = RequestMethod.POST)
     public ResponseEntity<Object> register(@RequestParam(value = "email") String userName, @RequestParam(value = "password") String password) {
@@ -90,9 +95,6 @@ public class SalvoController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    private boolean isGuest(Authentication authentication) {
-        return authentication == null || authentication instanceof AnonymousAuthenticationToken;
-    }
 
     //CREAR JUEGO
     @PostMapping("/games")
