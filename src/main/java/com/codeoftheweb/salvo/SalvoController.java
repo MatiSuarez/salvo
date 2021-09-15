@@ -348,7 +348,8 @@ public class SalvoController {
                 .stream()
                 .flatMap(slv -> slv.getSalvoes()
                         .stream().map(slv1 -> makeSalvoDTO(slv1))).collect(Collectors.toList()));
-        dto.put("hits", makeHitsDTO());
+        dto.put("hits", gamePlayer.getSalvoes().stream().map(this::makeHitsDTO));
+        dto.put("sunks", gamePlayer.getSalvoes().stream().map(this::makeSinkDTO));
 
         // UTILIZANDO 'FOR' PARA SALVO
         /*List <Map <String, Object>> listAux= new ArrayList<>();
@@ -367,11 +368,17 @@ public class SalvoController {
         return dto;
     }
 
-    public Map<String, Object> makeHitsDTO(){
+    public Map<String, Object> makeHitsDTO(Salvo salvo){
         Map<String, Object> dto = new LinkedHashMap<>();
-        List<String>  lst = new ArrayList<>();
-        dto.put("self", lst);
-        dto.put("opponent", lst);
+        dto.put("self", salvo.getTurn());
+        dto.put("opponent", salvo.getHits());
+        return dto;
+    }
+
+    public Map<String, Object> makeSinkDTO(Salvo salvo){
+        Map<String, Object> dto = new LinkedHashMap<>();
+        dto.put("turn", salvo.getTurn());
+        dto.put("opponent", salvo.getSunkedShips().stream().map(this::makeShipDTO));
         return dto;
     }
 }
