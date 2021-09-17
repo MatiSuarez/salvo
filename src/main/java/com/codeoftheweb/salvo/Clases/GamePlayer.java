@@ -1,15 +1,19 @@
 package com.codeoftheweb.salvo.Clases;
 
+import com.codeoftheweb.salvo.Repositories.SalvoRepository;
+import com.codeoftheweb.salvo.Repositories.ShipRepository;
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.time.LocalDateTime;
+import java.util.stream.Collectors;
 
 
 @Entity
 public class GamePlayer {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
@@ -88,12 +92,14 @@ public class GamePlayer {
         this.salvoes = salvoes;
     }
 
-    public Optional<GamePlayer> getOpponent() {
-        return this.getGameID().getGamePlayers().stream().filter(gp -> gp.getId() != this.getId()).findFirst();
-    }
 
     ////OTRA FORMA DE RESOLVER SCORE
     /*public  Score getScore(){
         return playerID.getScore(this.gameID);
     }*/
+
+    public Optional<GamePlayer> getOpponent() {
+        return this.getGameID().getGamePlayers().stream().filter(gp -> gp.getId() != this.getId()).findFirst();
+    }
+
 }
