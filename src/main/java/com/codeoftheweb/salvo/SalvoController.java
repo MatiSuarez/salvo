@@ -382,19 +382,6 @@ public class SalvoController {
         return dto;
     }
 
-    /*public Map<String, Object> getSelfHits(Salvo salvo) {
-        Map<java.lang.String, java.lang.Object> dto = new LinkedHashMap<>();
-
-        dto.put("turn", salvo.getTurn());
-
-        dto.put("hitLocations", hitsLoc(salvo));
-
-        dto.put("damages", getDamage(salvo.getSalvoID())); // salvoID = gamePlayer
-
-        dto.put("missed", salvo.getSalvoLocations().size() - hitsLoc(salvo).size());
-
-        return dto;
-    }*/
 
     public Optional<GamePlayer> getOpponent(GamePlayer gamePlayer) {
         return gamePlayer.getGameID().getGamePlayers().stream().filter(gp -> gp.getId() != gamePlayer.getId()).findFirst();
