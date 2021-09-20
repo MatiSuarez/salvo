@@ -377,8 +377,8 @@ public class SalvoController {
 
     public Map<String, Object> makeHitsDTO(GamePlayer gamePlayer) {
         Map<String, Object> dto = new LinkedHashMap<>();
-        dto.put("self", getDamage(gamePlayer));
-        dto.put("opponent", getDamage(getOpponent(gamePlayer).get()));
+        dto.put("self", getHits(gamePlayer));
+        dto.put("opponent", getHits(getOpponent(gamePlayer).get()));
         return dto;
     }
 
@@ -386,7 +386,7 @@ public class SalvoController {
     public Optional<GamePlayer> getOpponent(GamePlayer gamePlayer) {
         return gamePlayer.getGameID().getGamePlayers().stream().filter(gp -> gp.getId() != gamePlayer.getId()).findFirst();
     }
-
+    // para HIT LOCATIONS
     public List<String> hitsLoc(Salvo salvo) {
         List<String> salvoLoc = salvo.getSalvoLocations();
         List<String> ships = getOpponent(salvo.getSalvoID()).get().getShips().stream().flatMap(ship -> ship.getShipLocations().stream()).collect(Collectors.toList());
@@ -395,10 +395,11 @@ public class SalvoController {
         return hits;
     }
 
-    public List<Map<String, Object>> getDamage(GamePlayer gamepLayer) {
+    public List<Map<String, Object>> getHits(GamePlayer gamepLayer) {
         List<Map<String, Object>> principal = new ArrayList<>();
         GamePlayer opponent = gamepLayer.getOpponent().get();
 
+        //para DAMAGES
         Integer carrier= 0;
         Integer battleship= 0;
         Integer submarine= 0;
@@ -408,7 +409,6 @@ public class SalvoController {
         for( Salvo newSalvo : gamepLayer.getSalvoes()){
             Map<String, Object> dto = new LinkedHashMap<>();
             Map<String, Object> damage = new LinkedHashMap<>();
-
 
             Integer carrierHits = 0;
             Integer battleshipHits = 0;
@@ -474,7 +474,7 @@ public class SalvoController {
 
             dto.put("turn", newSalvo.getTurn());
             dto.put("hitLocations", hitsLoc(newSalvo));
-            dto.put("damages", damage); // salvoID = gamePlayer
+            dto.put("damages", damage); //
             dto.put("missed", newSalvo.getSalvoLocations().size() - hitsLoc(newSalvo).size());
 
             principal.add(dto);
