@@ -102,4 +102,6 @@ public class GamePlayer {
         return this.getGameID().getGamePlayers().stream().filter(gp -> gp.getId() != this.getId()).findFirst();
     }
 
+
+
 }

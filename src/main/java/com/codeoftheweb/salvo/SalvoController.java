@@ -347,6 +347,14 @@ public class SalvoController {
                 .stream()
                 .flatMap(slv -> slv.getSalvoes()
                         .stream().map(slv1 -> makeSalvoDTO(slv1))).collect(Collectors.toList()));
+        // UTILIZANDO 'FOR' PARA SALVO
+        /*List <Map <String, Object>> listAux= new ArrayList<>();
+                for(GamePlayer gp:gamePlayer.getGameID().getGamePlayers()){
+                    for(Salvo s:gamePlayer.getSalvoes()){
+                        listAux.add(this.makeSalvoDTO(s));
+                    }
+                }
+                dto.put("salvoes", listAux); */
 
         if (getOpponent(gamePlayer).isPresent()) {
             if (getOpponent(gamePlayer).get().getShips().size() == 5) {
@@ -358,14 +366,6 @@ public class SalvoController {
             dto.put("hits", new ArrayList<>());
         }
 
-        // UTILIZANDO 'FOR' PARA SALVO
-        /*List <Map <String, Object>> listAux= new ArrayList<>();
-                for(GamePlayer gp:gamePlayer.getGameID().getGamePlayers()){
-                    for(Salvo s:gamePlayer.getSalvoes()){
-                        listAux.add(this.makeSalvoDTO(s));
-                    }
-                }
-                dto.put("salvoes", listAux); */
         return dto;
     }
 
@@ -383,11 +383,14 @@ public class SalvoController {
     }
 
 
+
     public Optional<GamePlayer> getOpponent(GamePlayer gamePlayer) {
         return gamePlayer.getGameID().getGamePlayers().stream().filter(gp -> gp.getId() != gamePlayer.getId()).findFirst();
     }
+
+
     // para HIT LOCATIONS
-    public List<String> hitsLoc(Salvo salvo) {
+    public List<String> hitLocations(Salvo salvo) {
         List<String> salvoLoc = salvo.getSalvoLocations();
         List<String> ships = getOpponent(salvo.getSalvoID()).get().getShips().stream().flatMap(ship -> ship.getShipLocations().stream()).collect(Collectors.toList());
 
@@ -460,26 +463,24 @@ public class SalvoController {
                     }
                 }
             }
-            damage.put("carrier", carrier);
             damage.put("carrierHits", carrierHits);
-            damage.put("battleship", battleship);
             damage.put("battleshipHits", battleshipHits);
-            damage.put("submarine", submarine);
             damage.put("submarineHits", submarineHits);
-            damage.put("destroyer", destroyer);
             damage.put("destroyerHits", destroyerHits);
-            damage.put("patrolboat", patrolboat);
             damage.put("patrolboatHits", patrolboatHits);
 
+            damage.put("carrier", carrier;
+            damage.put("battleship", battleship);
+            damage.put("submarine", submarine);
+            damage.put("destroyer", destroyer);
+            damage.put("patrolboat", patrolboat);
 
             dto.put("turn", newSalvo.getTurn());
-            dto.put("hitLocations", hitsLoc(newSalvo));
+            dto.put("hitLocations", hitLocations(newSalvo));
             dto.put("damages", damage); //
-            dto.put("missed", newSalvo.getSalvoLocations().size() - hitsLoc(newSalvo).size());
-
+            dto.put("missed", newSalvo.getSalvoLocations().size() - hitLocations(newSalvo).size());
             principal.add(dto);
         }
-
         return principal;
     }
 
