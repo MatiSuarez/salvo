@@ -469,7 +469,7 @@ public class SalvoController {
             damage.put("destroyerHits", destroyerHits);
             damage.put("patrolboatHits", patrolboatHits);
 
-            damage.put("carrier", carrier;
+            damage.put("carrier", carrier);
             damage.put("battleship", battleship);
             damage.put("submarine", submarine);
             damage.put("destroyer", destroyer);
