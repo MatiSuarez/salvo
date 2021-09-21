@@ -356,15 +356,22 @@ public class SalvoController {
                 }
                 dto.put("salvoes", listAux); */
 
-        if (getOpponent(gamePlayer).isPresent()) {
-            if (getOpponent(gamePlayer).get().getShips().size() == 5) {
-                dto.put("hits", makeHitsDTO(gamePlayer));
+
+            Map<String, Object> hits = new LinkedHashMap<String, Object>();
+        if(getOpponent(gamePlayer).isPresent()) {
+            if(getOpponent(gamePlayer).get().getShips().size() == 5) {
+                hits.put("self", makeHitsDTO(gamePlayer));
+                hits.put("opponent", makeHitsDTO(gamePlayer.getOpponent().get()));
             } else {
-                dto.put("hits", new ArrayList<>());
+                hits.put("self", new ArrayList<>());
+                hits.put("opponent", new ArrayList<>());
             }
         } else {
-            dto.put("hits", new ArrayList<>());
+            hits.put("self", new ArrayList<>());
+            hits.put("opponent", new ArrayList<>());
         }
+        dto.put("hits", hits);
+
 
         return dto;
     }
