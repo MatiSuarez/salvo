@@ -413,6 +413,9 @@ public class SalvoController {
         Integer destroyer = 0;
         Integer patrolboat = 0;
 
+        //Posible solucion para el daño acumulado
+        //List<Salvo> salvo = new ArrayList<>(gamepLayer.getSalvoes());
+
         for( Salvo newSalvo : gamepLayer.getSalvoes()){
             Map<String, Object> dto = new LinkedHashMap<>();
             Map<String, Object> damage = new LinkedHashMap<>();

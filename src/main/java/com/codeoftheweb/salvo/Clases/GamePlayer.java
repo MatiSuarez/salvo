@@ -32,6 +32,7 @@ public class GamePlayer {
     Set<Ship> ships;
 
     @OneToMany(mappedBy="salvoID", fetch=FetchType.EAGER)
+    @OrderBy
     Set<Salvo> salvoes;
 
 
