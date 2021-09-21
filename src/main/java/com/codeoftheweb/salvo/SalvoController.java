@@ -402,9 +402,9 @@ public class SalvoController {
         return hits;
     }
 
-    public List<Map<String, Object>> getHits(GamePlayer gamepLayer) {
+    public List<Map<String, Object>> getHits(GamePlayer gamePlayer) {
         List<Map<String, Object>> principal = new ArrayList<>();
-        GamePlayer opponent = gamepLayer.getOpponent().get();
+        GamePlayer opponent = gamePlayer.getOpponent().get();
 
         //para DAMAGES
         Integer carrier = 0;
@@ -414,9 +414,9 @@ public class SalvoController {
         Integer patrolboat = 0;
 
         //Posible solucion para el daño acumulado
-        //List<Salvo> salvo = new ArrayList<>(gamepLayer.getSalvoes());
+        //List<Salvo> salvo = new ArrayList<>(gamePlayer.getSalvoes());
 
-        for( Salvo newSalvo : gamepLayer.getSalvoes()){
+        for( Salvo newSalvo : gamePlayer.getSalvoes()){
             Map<String, Object> dto = new LinkedHashMap<>();
             Map<String, Object> damage = new LinkedHashMap<>();
 
