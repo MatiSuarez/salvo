@@ -356,8 +356,8 @@ public class SalvoController {
                 }
                 dto.put("salvoes", listAux); */
 
-
-            Map<String, Object> hits = new LinkedHashMap<String, Object>();
+        //HITS
+        Map<String, Object> hits = new LinkedHashMap<String, Object>();
         if(getOpponent(gamePlayer).isPresent()) {
             if(getOpponent(gamePlayer).get().getShips().size() == 5) {
                 hits.put("self", makeHitsDTO(gamePlayer));
@@ -410,11 +410,11 @@ public class SalvoController {
         GamePlayer opponent = gamepLayer.getOpponent().get();
 
         //para DAMAGES
-        Integer carrier= 0;
-        Integer battleship= 0;
-        Integer submarine= 0;
-        Integer destroyer= 0;
-        Integer patrolboat= 0;
+        Integer carrier = 0;
+        Integer battleship = 0;
+        Integer submarine = 0;
+        Integer destroyer = 0;
+        Integer patrolboat = 0;
 
         for( Salvo newSalvo : gamepLayer.getSalvoes()){
             Map<String, Object> dto = new LinkedHashMap<>();
@@ -484,7 +484,7 @@ public class SalvoController {
 
             dto.put("turn", newSalvo.getTurn());
             dto.put("hitLocations", hitLocations(newSalvo));
-            dto.put("damages", damage); //
+            dto.put("damages", damage);
             dto.put("missed", newSalvo.getSalvoLocations().size() - hitLocations(newSalvo).size());
             principal.add(dto);
         }
