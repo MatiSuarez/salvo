@@ -216,32 +216,28 @@ public class SalvoController {
             if (gamePlayer.isPresent()) {
                 Player currentPlayer = playerRepository.findByUserName(authentication.getName());
                 if (currentPlayer.getId() == gamePlayer.get().getPlayerID().getId()) {
-                    if (gamePlayer.get().getSalvoes().size() + 1 == salvo.getTurn()) {
                         Optional<GamePlayer> rival = gamePlayer.get().getOpponent();
                         if (rival.isPresent()) {
                             if (gamePlayer.get().getShips().size() == 5) {
-                                if (salvo.getSalvoLocations().size() >= 5) {
+                                if (salvo.getSalvoLocations().size() <= 5 && salvo.getSalvoLocations().size() >= 1) {
 
-                                    Salvo currentSalvo = new Salvo(salvo.getTurn() + 1, gamePlayer.get(), salvo.getSalvoLocations());
+                                    Salvo currentSalvo = new Salvo(gamePlayer.get().getSalvoes().size() + 1, gamePlayer.get(), salvo.getSalvoLocations());
                                     salvoRepository.save(currentSalvo);
-                                    return new ResponseEntity<>(makeMap("Turno", salvo.getTurn() + 1), HttpStatus.CREATED);
+                                    return new ResponseEntity<>(makeMap("Turno", gamePlayer.get().getSalvoes().size() + 1), HttpStatus.CREATED);
                                 } else {
                                     return new ResponseEntity<>(makeMap("Error", "No se puden usar mas de 5 salvos en un mismo turno!"), HttpStatus.FORBIDDEN);
                                 }
                             } else {
                                 return new ResponseEntity<>(makeMap("Error", "Deben estar los 5 barcos colocados!"), HttpStatus.FORBIDDEN);
                             }
-                        } else {
-                            return new ResponseEntity<>(makeMap("Error", "Todavia no es tu turno!"), HttpStatus.FORBIDDEN);
-                        }
                     } else {
 
                         //SI NO HAY RIVAL
-                        if (gamePlayer.get().getSalvoes().size() == 0) {
+                        if (gamePlayer.get().getSalvoes().size() >= 0) {
                             salvoRepository.save(new Salvo(salvo.getTurn() + 1, gamePlayer.get(), salvo.getSalvoLocations()));
                             return new ResponseEntity<>(makeMap("Turno", salvo.getTurn() + 1), HttpStatus.CREATED);
                         } else {
-                            return new ResponseEntity<>(makeMap("Error", "Tenes que esperar a un rival!"), HttpStatus.FORBIDDEN);
+                            return new ResponseEntity<>(makeMap("Error", "Tenes que esperar a tu rival!"), HttpStatus.FORBIDDEN);
                         }
                     }
                 } else {
@@ -256,6 +252,7 @@ public class SalvoController {
             return new ResponseEntity<>(makeMap("Error", "Tenes que iniciar sesión!"), HttpStatus.UNAUTHORIZED);
         }
     }
+
 
     @GetMapping("/games/players/{gameplayerid}/salvos")
     public ResponseEntity<Map> getSalvos(@PathVariable Long gameplayerid, Authentication authentication) {
@@ -360,8 +357,8 @@ public class SalvoController {
         Map<String, Object> hits = new LinkedHashMap<String, Object>();
         if(getOpponent(gamePlayer).isPresent()) {
             if(getOpponent(gamePlayer).get().getShips().size() == 5) {
-                hits.put("self", makeHitsDTO(gamePlayer));
-                hits.put("opponent", makeHitsDTO(gamePlayer.getOpponent().get()));
+                hits.put("self", getHits(gamePlayer));
+                hits.put("opponent", getHits(gamePlayer.getOpponent().get()));
             } else {
                 hits.put("self", new ArrayList<>());
                 hits.put("opponent", new ArrayList<>());
@@ -382,12 +379,12 @@ public class SalvoController {
         return dto;
     }
 
-    public Map<String, Object> makeHitsDTO(GamePlayer gamePlayer) {
+    /*public Map<String, Object> makeHitsDTO(GamePlayer gamePlayer) {
         Map<String, Object> dto = new LinkedHashMap<>();
         dto.put("self", getHits(gamePlayer));
         dto.put("opponent", getHits(getOpponent(gamePlayer).get()));
         return dto;
-    }
+    }*/
 
 
 
