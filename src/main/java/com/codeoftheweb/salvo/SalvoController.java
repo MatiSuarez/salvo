@@ -216,20 +216,20 @@ public class SalvoController {
             if (gamePlayer.isPresent()) {
                 Player currentPlayer = playerRepository.findByUserName(authentication.getName());
                 if (currentPlayer.getId() == gamePlayer.get().getPlayerID().getId()) {
-                        Optional<GamePlayer> rival = gamePlayer.get().getOpponent();
-                        if (rival.isPresent()) {
-                            if (gamePlayer.get().getShips().size() == 5) {
-                                if (salvo.getSalvoLocations().size() <= 5 && salvo.getSalvoLocations().size() >= 1) {
+                    Optional<GamePlayer> rival = gamePlayer.get().getOpponent();
+                    if (rival.isPresent()) {
+                        if (gamePlayer.get().getShips().size() == 5) {
+                            if (salvo.getSalvoLocations().size() <= 5 && salvo.getSalvoLocations().size() >= 1) {
 
-                                    Salvo currentSalvo = new Salvo(gamePlayer.get().getSalvoes().size() + 1, gamePlayer.get(), salvo.getSalvoLocations());
-                                    salvoRepository.save(currentSalvo);
-                                    return new ResponseEntity<>(makeMap("Turno", gamePlayer.get().getSalvoes().size() + 1), HttpStatus.CREATED);
-                                } else {
-                                    return new ResponseEntity<>(makeMap("Error", "No se puden usar mas de 5 salvos en un mismo turno!"), HttpStatus.FORBIDDEN);
-                                }
+                                Salvo currentSalvo = new Salvo(gamePlayer.get().getSalvoes().size() + 1, gamePlayer.get(), salvo.getSalvoLocations());
+                                salvoRepository.save(currentSalvo);
+                                return new ResponseEntity<>(makeMap("Turno", gamePlayer.get().getSalvoes().size() + 1), HttpStatus.CREATED);
                             } else {
-                                return new ResponseEntity<>(makeMap("Error", "Deben estar los 5 barcos colocados!"), HttpStatus.FORBIDDEN);
+                                return new ResponseEntity<>(makeMap("Error", "No se puden usar mas de 5 salvos en un mismo turno!"), HttpStatus.FORBIDDEN);
                             }
+                        } else {
+                            return new ResponseEntity<>(makeMap("Error", "Deben estar los 5 barcos colocados!"), HttpStatus.FORBIDDEN);
+                        }
                     } else {
 
                         //SI NO HAY RIVAL
@@ -331,7 +331,7 @@ public class SalvoController {
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
         dto.put("id", gamePlayer.getGameID().getId());
         dto.put("created", gamePlayer.getGameID().getCreationDate());
-        dto.put("gameState", "PLACESHIPS");
+        dto.put("gameState", gameStatus(gamePlayer));
         dto.put("gamePlayers", gamePlayer.getGameID().getGamePlayers()
                 .stream()
                 .map(gp -> makeGamePlayerDTO(gp))
@@ -355,8 +355,8 @@ public class SalvoController {
 
         //HITS
         Map<String, Object> hits = new LinkedHashMap<String, Object>();
-        if(getOpponent(gamePlayer).isPresent()) {
-            if(getOpponent(gamePlayer).get().getShips().size() == 5) {
+        if (getOpponent(gamePlayer).isPresent()) {
+            if (getOpponent(gamePlayer).get().getShips().size() == 5) {
                 hits.put("self", getHits(gamePlayer));
                 hits.put("opponent", getHits(gamePlayer.getOpponent().get()));
             } else {
@@ -379,15 +379,6 @@ public class SalvoController {
         return dto;
     }
 
-    /*public Map<String, Object> makeHitsDTO(GamePlayer gamePlayer) {
-        Map<String, Object> dto = new LinkedHashMap<>();
-        dto.put("self", getHits(gamePlayer));
-        dto.put("opponent", getHits(getOpponent(gamePlayer).get()));
-        return dto;
-    }*/
-
-
-
     public Optional<GamePlayer> getOpponent(GamePlayer gamePlayer) {
         return gamePlayer.getGameID().getGamePlayers().stream().filter(gp -> gp.getId() != gamePlayer.getId()).findFirst();
     }
@@ -398,7 +389,7 @@ public class SalvoController {
         List<String> salvoLoc = salvo.getSalvoLocations();
         List<String> ships = getOpponent(salvo.getSalvoID()).get().getShips().stream().flatMap(ship -> ship.getShipLocations().stream()).collect(Collectors.toList());
 
-        List <String> hits = ships.stream().filter(x -> salvoLoc.contains(x)).collect(Collectors.toList());
+        List<String> hits = ships.stream().filter(x -> salvoLoc.contains(x)).collect(Collectors.toList());
         return hits;
     }
 
@@ -416,7 +407,7 @@ public class SalvoController {
         //Posible solucion para el daño acumulado
         //List<Salvo> salvo = new ArrayList<>(gamePlayer.getSalvoes());
 
-        for( Salvo newSalvo : gamePlayer.getSalvoes()){
+        for (Salvo newSalvo : gamePlayer.getSalvoes()) {
             Map<String, Object> dto = new LinkedHashMap<>();
             Map<String, Object> damage = new LinkedHashMap<>();
 
@@ -426,11 +417,11 @@ public class SalvoController {
             Integer destroyerHits = 0;
             Integer patrolboatHits = 0;
 
-            for( String location : newSalvo.getSalvoLocations()) {
+            for (String location : newSalvo.getSalvoLocations()) {
                 if (opponent.getShips().size() == 5) {
 
-                   //carrier
-                    for (String carrierLocation : opponent.getShips().stream().filter(c -> c.getType().equals("carrier")).findFirst().get().getShipLocations()){
+                    //carrier
+                    for (String carrierLocation : opponent.getShips().stream().filter(c -> c.getType().equals("carrier")).findFirst().get().getShipLocations()) {
                         if (carrierLocation == location) {
                             carrier = carrier + 1;
                             carrierHits = carrierHits + 1;
@@ -438,7 +429,7 @@ public class SalvoController {
                     }
 
                     //battleship
-                    for (String carrierLocation : opponent.getShips().stream().filter(c -> c.getType().equals("battleship")).findFirst().get().getShipLocations()){
+                    for (String carrierLocation : opponent.getShips().stream().filter(c -> c.getType().equals("battleship")).findFirst().get().getShipLocations()) {
                         if (carrierLocation == location) {
                             battleship = battleship + 1;
                             battleshipHits = battleshipHits + 1;
@@ -446,7 +437,7 @@ public class SalvoController {
                     }
 
                     //submarine
-                    for (String carrierLocation : opponent.getShips().stream().filter(c -> c.getType().equals("submarine")).findFirst().get().getShipLocations()){
+                    for (String carrierLocation : opponent.getShips().stream().filter(c -> c.getType().equals("submarine")).findFirst().get().getShipLocations()) {
                         if (carrierLocation == location) {
                             submarine = submarine + 1;
                             submarineHits = submarineHits + 1;
@@ -454,7 +445,7 @@ public class SalvoController {
                     }
 
                     //destroyer
-                    for (String carrierLocation : opponent.getShips().stream().filter(c -> c.getType().equals("destroyer")).findFirst().get().getShipLocations()){
+                    for (String carrierLocation : opponent.getShips().stream().filter(c -> c.getType().equals("destroyer")).findFirst().get().getShipLocations()) {
                         if (carrierLocation == location) {
                             destroyer = destroyer + 1;
                             destroyerHits = destroyerHits + 1;
@@ -462,7 +453,7 @@ public class SalvoController {
                     }
 
                     //patrolboat
-                    for (String carrierLocation : opponent.getShips().stream().filter(c -> c.getType().equals("patrolboat")).findFirst().get().getShipLocations()){
+                    for (String carrierLocation : opponent.getShips().stream().filter(c -> c.getType().equals("patrolboat")).findFirst().get().getShipLocations()) {
                         if (carrierLocation == location) {
                             patrolboat = patrolboat + 1;
                             patrolboatHits = patrolboatHits + 1;
@@ -491,6 +482,67 @@ public class SalvoController {
         return principal;
     }
 
+
+    //OBTENER BARCOS HUNDIDOS
+    public boolean getSunkedShips(GamePlayer gamePlayer) {
+        List<String> allLocations = gamePlayer.getSalvoes().stream().flatMap(sv -> sv.getSalvoLocations().stream()).collect(Collectors.toList());
+        List<String> allShipsLocations = getOpponent(gamePlayer).get().getShips().stream().flatMap(sl -> sl.getShipLocations().stream()).collect(Collectors.toList());
+        List<String> allHitsLocations = allLocations.stream().filter(x -> allShipsLocations.contains(x)).collect(Collectors.toList());
+
+        if (getOpponent(gamePlayer).isPresent()) {
+            boolean sunks = getOpponent(gamePlayer).get().getShips().stream().flatMap(x -> x.getShipLocations().stream()).equals(allHitsLocations);
+            return sunks;
+        }
+        return false;
+    }
+
+
+    //ESTADOS
+    public GameStatus gameStatus(GamePlayer gamePlayer) {
+        if (gamePlayer.getShips().isEmpty()) {
+            return GameStatus.PLACESHIPS;
+        } else {
+            if (gamePlayer.getOpponent().isPresent()) {
+                if (gamePlayer.getOpponent().get().getShips().isEmpty()) {
+                    return GameStatus.WAIT;
+                } else {
+                    if (gamePlayer.getSalvoes().stream().noneMatch(gs -> gs.getTurn() == gamePlayer.getSalvoes().size())) {
+                        return GameStatus.PLAY;
+                    } else {
+                        if (gamePlayer.getOpponent().get().getSalvoes().stream().noneMatch(gs -> gs.getTurn() == gamePlayer.getSalvoes().size())) {
+                            return GameStatus.WAIT;
+                        } else if (gamePlayer.getSalvoes().size() == gamePlayer.getOpponent().get().getSalvoes().size()) {
+                            boolean mySunks = getSunkedShips(gamePlayer);
+                            boolean oppSunks = false;
+
+                            if (gamePlayer.getOpponent().isPresent()) {
+                                oppSunks = getSunkedShips(getOpponent(gamePlayer).get());
+                            }
+
+                            if (mySunks == oppSunks) {
+                                return GameStatus.TIED;
+                            } else if (oppSunks && mySunks == false) {
+                                return GameStatus.LOST;
+                            } else if (mySunks && oppSunks == false) {
+                                return GameStatus.WON;
+                            } else {
+                                return GameStatus.PLAY;
+                            }
+                        } else {
+                            if (getSunkedShips(gamePlayer)) {
+                                return GameStatus.WAIT;
+                            } else if (gamePlayer.getSalvoes().size() - gamePlayer.getOpponent().get().getSalvoes().size() == 1) {
+                                return GameStatus.WAIT;
+                            } else {
+                                return GameStatus.PLAY;
+                            }
+                        }
+                    }
+                }
+            }
+            return GameStatus.WAIT;
+        }
+    }
 
 }
 
