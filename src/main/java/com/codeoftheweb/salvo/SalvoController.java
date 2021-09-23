@@ -71,13 +71,19 @@ public class SalvoController {
         } else {
 
             if (gamePlayer.getOpponent().isPresent()) {
-                return setScore(gamePlayer);
-
-            } else {
-
-                return new ResponseEntity<>(makeMap("Error", "Player incorrecto, no hagas trampa!"), HttpStatus.UNAUTHORIZED);
+                if (gameStatus(gamePlayer) == GameStatus.TIED) {
+                    scoreRepository.save(new Score(LocalDateTime.now(), 0.5, gamePlayer.getPlayerID(), gamePlayer.getGameID()));
+                    scoreRepository.save(new Score(LocalDateTime.now(), 0.5, gamePlayer.getOpponent().get().getPlayerID(), gamePlayer.getGameID()));
+                } else if (gameStatus(gamePlayer) == GameStatus.WON) {
+                    scoreRepository.save(new Score(LocalDateTime.now(), 1.0, gamePlayer.getPlayerID(), gamePlayer.getGameID()));
+                    scoreRepository.save(new Score(LocalDateTime.now(), 0.0, gamePlayer.getOpponent().get().getPlayerID(), gamePlayer.getGameID()));
+                } else if (gameStatus(gamePlayer) == GameStatus.LOST) {
+                    scoreRepository.save(new Score(LocalDateTime.now(), 0.0, gamePlayer.getPlayerID(), gamePlayer.getGameID()));
+                    scoreRepository.save(new Score(LocalDateTime.now(), 1.0, gamePlayer.getOpponent().get().getPlayerID(), gamePlayer.getGameID()));
+                }
             }
         }
+         return new ResponseEntity<>(makeMap("Error", "Player incorrecto, no hagas trampa!"), HttpStatus.UNAUTHORIZED);
     }
 
 
@@ -364,8 +370,8 @@ public class SalvoController {
         Map<String, Object> hits = new LinkedHashMap<String, Object>();
         if (getOpponent(gamePlayer).isPresent()) {
             if (getOpponent(gamePlayer).get().getShips().size() == 5) {
-                hits.put("self", getHits(gamePlayer));
-                hits.put("opponent", getHits(gamePlayer.getOpponent().get()));
+                hits.put("self", getHits(gamePlayer.getOpponent().get()));
+                hits.put("opponent", getHits(gamePlayer));
             } else {
                 hits.put("self", new ArrayList<>());
                 hits.put("opponent", new ArrayList<>());
@@ -490,37 +496,51 @@ public class SalvoController {
 
 
     //OBTENER BARCOS HUNDIDOS
-    public boolean getSunkedShips(GamePlayer gamePlayer) {
+    /*public boolean getSunkedShips(GamePlayer gamePlayer) {
         List<String> allLocations = gamePlayer.getSalvoes().stream().flatMap(sv -> sv.getSalvoLocations().stream()).collect(Collectors.toList());
         List<String> allShipsLocations = getOpponent(gamePlayer).get().getShips().stream().flatMap(sl -> sl.getShipLocations().stream()).collect(Collectors.toList());
+
         List<String> allHitsLocations = allLocations.stream().filter(x -> allShipsLocations.contains(x)).collect(Collectors.toList());
 
         boolean sunks = getOpponent(gamePlayer).get().getShips().stream().flatMap(x -> x.getShipLocations().stream()).equals(allHitsLocations);
 
-        if(!sunks) {
-        return false;
-        }
+        if(sunks) {
         return true;
+        }
+        return false;
+    }*/
+
+
+    private boolean getSunkedShips(GamePlayer gamePlayer) {
+
+        GamePlayer opponent = gamePlayer.getOpponent().get();
+
+        if (!gamePlayer.getShips().isEmpty() && !gamePlayer.getSalvoes().isEmpty()) {
+            return  gamePlayer.getSalvoes()
+                    .stream().flatMap(salvo -> salvo.getSalvoLocations().stream()).collect(Collectors.toList())
+                    .containsAll(gamePlayer.getShips()
+                            .stream().flatMap(ship -> ship.getShipLocations().stream())
+                            .collect(Collectors.toList()));
+        }
+        return false;
     }
 
 
     //ESTADOS
     public GameStatus gameStatus(GamePlayer gamePlayer) {
-        if (gamePlayer.getGameID().getGamePlayers().size() < 2) {
-            return GameStatus.WAITTING_FOR_OPPONENT;
-        } else {
         if (gamePlayer.getShips().isEmpty()) {
             return GameStatus.PLACESHIPS;
         } else {
             if (gamePlayer.getOpponent().isPresent()) {
                 if (gamePlayer.getOpponent().get().getShips().isEmpty()) {
-                    return GameStatus.WAIT;
+                    return GameStatus.WAITTING_FOR_OPPONENT;
                 } else {
                     if (gamePlayer.getSalvoes().stream().noneMatch(gs -> gs.getTurn() == gamePlayer.getSalvoes().size())) {
                         return GameStatus.PLAY;
                     } else {
                         if (gamePlayer.getOpponent().get().getSalvoes().stream().noneMatch(gs -> gs.getTurn() == gamePlayer.getSalvoes().size())) {
                             return GameStatus.WAIT;
+
                         } else if (gamePlayer.getSalvoes().size() == gamePlayer.getOpponent().get().getSalvoes().size()) {
                             boolean mySunks = getSunkedShips(gamePlayer);
                             boolean oppSunks = false;
@@ -549,30 +569,11 @@ public class SalvoController {
                         }
                     }
                 }
-            }
         }
             return GameStatus.WAIT;
         }
     }
 
-    public void setScore(GamePlayer gamePlayer) {
-
-        if(gameStatus(gamePlayer) == GameStatus.TIED) {
-            scoreRepository.save(new Score(LocalDateTime.now(), 0.5, gamePlayer.getPlayerID(), gamePlayer.getGameID()));
-            scoreRepository.save(new Score(LocalDateTime.now(), 0.5, gamePlayer.getOpponent().get().getPlayerID(), gamePlayer.getGameID()));
-        }
-
-        if(gameStatus(gamePlayer) == GameStatus.WON) {
-            scoreRepository.save(new Score(LocalDateTime.now(), 1.0, gamePlayer.getPlayerID(), gamePlayer.getGameID()));
-            scoreRepository.save(new Score(LocalDateTime.now(), 0.0, gamePlayer.getOpponent().get().getPlayerID(), gamePlayer.getGameID()));
-        }
-
-        if(gameStatus(gamePlayer) == GameStatus.LOST) {
-            scoreRepository.save(new Score(LocalDateTime.now(), 0.0, gamePlayer.getPlayerID(), gamePlayer.getGameID()));
-            scoreRepository.save(new Score(LocalDateTime.now(), 1.0, gamePlayer.getOpponent().get().getPlayerID(), gamePlayer.getGameID()));
-        }
-
-    }
 
 }
 
