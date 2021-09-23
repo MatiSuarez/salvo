@@ -348,7 +348,7 @@ button:focus {
 
 #login-form {
     justify-content: flex-end;
-    color: white;
+    color: black;
 }
 
 #username, #password {
